@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &702214297
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 930555828}
   duration: 2
-  ease: 22
+  ease: 30
   diamond: {fileID: 2137079776}
 --- !u!212 &930555828
 SpriteRenderer:
