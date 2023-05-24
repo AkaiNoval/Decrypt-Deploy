@@ -140,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5679488481145850346, guid: bc9cb5e02fcd91a4083e36d985f9e6eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5
+      value: 4.13
       objectReference: {fileID: 0}
     - target: {fileID: 5679488481145850346, guid: bc9cb5e02fcd91a4083e36d985f9e6eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.44
       objectReference: {fileID: 0}
     - target: {fileID: 5679488481145850346, guid: bc9cb5e02fcd91a4083e36d985f9e6eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -180,6 +180,110 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc9cb5e02fcd91a4083e36d985f9e6eb, type: 3}
+--- !u!1 &1318764348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2149214066858227066, guid: fa2cbc63e07086d4e8427941012a64a8, type: 3}
+  m_PrefabInstance: {fileID: 1510419261}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1318764349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f5510a480cc4e4d8f504ab606153b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showGizmos: 0
+  targetSeeker: 1
+  target: {fileID: 0}
+  range: 10
+  distance: 0
+--- !u!114 &1318764351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e200b67a34b91419562f09013428fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soStats: {fileID: 11400000, guid: 38b055238ccc3b64b999609fd872d341, type: 2}
+  unitName: 
+  unitID: 
+  unitClass: 0
+  unitCost: 0
+  unitCharisma: 0
+  preparationTime: 0
+  maxHealth: 0
+  currentHealth: 0
+  healingSpeed: 0
+  unitMorale: 0
+  unitSpeed: 0
+  unitAgility: 0
+  unitDodgeChance: 0
+  unitCloseRange: 0
+  unitFarRange: 0
+  unitAccuracy: 0
+  unitCriticalChance: 0
+  unitCriticalDamage: 0
+  unitMeleeDamage: 0
+  unitRangeDamage: 0
+  unitPoisonDamage: 0
+  unitFireDamage: 0
+  unitCryoDamage: 0
+  unitElectrifiedDamage: 0
+  unitExplosionDamage: 0
+  unitBulletResistance: 0
+  unitMeleeResistance: 0
+  unitPoisonResistance: 0
+  unitFireResistance: 0
+  unitCryoResistance: 0
+  unitElectrifiedResistance: 0
+  unitExplosionResistance: 0
+--- !u!114 &1318764355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e5df767ffa6cd4d8fbde4736600c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combatPurpose: 0
+--- !u!114 &1318764356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 895699968290e5f4eb2cd308a8de6752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1318764357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acbea8d868ff53b429b8e928296bf24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1359038100
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,11 +499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2149214066858227067, guid: fa2cbc63e07086d4e8427941012a64a8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -3.29
       objectReference: {fileID: 0}
     - target: {fileID: 2149214066858227067, guid: fa2cbc63e07086d4e8427941012a64a8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2149214066858227067, guid: fa2cbc63e07086d4e8427941012a64a8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -519,6 +623,73 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1716670508 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5679488481145850336, guid: bc9cb5e02fcd91a4083e36d985f9e6eb, type: 3}
+  m_PrefabInstance: {fileID: 114855543}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1716670509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716670508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f5510a480cc4e4d8f504ab606153b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showGizmos: 0
+  targetSeeker: 0
+  target: {fileID: 0}
+  range: 10
+  distance: 0
+--- !u!114 &1716670511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716670508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e200b67a34b91419562f09013428fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soStats: {fileID: 11400000, guid: 38b055238ccc3b64b999609fd872d341, type: 2}
+  unitName: 
+  unitID: 
+  unitClass: 0
+  unitCost: 0
+  unitCharisma: 0
+  preparationTime: 0
+  maxHealth: 0
+  currentHealth: 0
+  healingSpeed: 0
+  unitMorale: 0
+  unitSpeed: 0
+  unitAgility: 0
+  unitDodgeChance: 0
+  unitCloseRange: 0
+  unitFarRange: 0
+  unitAccuracy: 0
+  unitCriticalChance: 0
+  unitCriticalDamage: 0
+  unitMeleeDamage: 0
+  unitRangeDamage: 0
+  unitPoisonDamage: 0
+  unitFireDamage: 0
+  unitCryoDamage: 0
+  unitElectrifiedDamage: 0
+  unitExplosionDamage: 0
+  unitBulletResistance: 0
+  unitMeleeResistance: 0
+  unitPoisonResistance: 0
+  unitFireResistance: 0
+  unitCryoResistance: 0
+  unitElectrifiedResistance: 0
+  unitExplosionResistance: 0
 --- !u!1 &1845967156
 GameObject:
   m_ObjectHideFlags: 0
