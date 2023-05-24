@@ -149,6 +149,7 @@ public class Targeting : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!showGizmos) return;
+        if (_unit==null) return;
         if (_unit.IsEnemy)
         {
             Gizmos.color = Color.red;
@@ -157,7 +158,10 @@ public class Targeting : MonoBehaviour
         {
             Gizmos.color = Color.cyan;
         }
-        Gizmos.DrawWireSphere(_unit.GetPosition(), range);
+        // Draw the first wire sphere using UnitFarRange
+        Gizmos.DrawWireSphere(_unit.GetPosition(), unitStats.UnitFarRange);
+        // Draw the second wire sphere using UnitCloseRange
+        Gizmos.DrawWireSphere(_unit.GetPosition(), unitStats.UnitCloseRange);
         if (Target == null) return;
         if (_unit.IsEnemy)
         {
