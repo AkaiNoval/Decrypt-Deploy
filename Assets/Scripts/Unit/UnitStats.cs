@@ -122,4 +122,13 @@ public class UnitStats : MonoBehaviour
         UnitElectrifiedResistance = soStats.ElectrifiedResistance;
         UnitExplosionResistance = soStats.ExplosionResistance;
     }
+
+    void PassiveHealing()
+    {
+        UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed,0,UnitMaxHealth);
+    }
+    void TakeDamage(float damageReceive)
+    {
+        UnitCurrentHealth -= damageReceive;
+    }
 }

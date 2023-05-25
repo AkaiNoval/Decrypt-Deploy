@@ -19,15 +19,20 @@ public class Targeting : MonoBehaviour
     [SerializeField] UnitObjective objTarget;
     UnitObjective[] objTargets;
     [SerializeField] float range = 10f;  // The maximum range for selecting a target
-    [SerializeField] float distance;
-    [SerializeField] float objDistTarget;
+    [SerializeField] float distanceToTarget;
+    [SerializeField] float distanceToObjective;
+    [SerializeField] float distanceBetweenTargetAndObject;
 
     public Unit Target { get { return target; } set { target = value; } }
     public UnitObjective ObjTarget { get => objTarget; set => objTarget = value; }
+    public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
+    public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
+    public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
+
     private void Awake()
     {
         _unit = GetComponent<Unit>();
-        unitStats= GetComponent<UnitStats>();
+        unitStats = GetComponent<UnitStats>();
         objTargets = FindObjectsOfType<UnitObjective>();
         foreach (var unitObj in objTargets)
         {
@@ -37,17 +42,16 @@ public class Targeting : MonoBehaviour
                 break; // Exit the loop once a suitable unitObjective is found
             }
         }
+        CalcDist();
     }
+
+
+
     private void Update()
     {
         // Update the current target by finding the closest unit within range
         Target = GetClosestUnit(_unit.GetPosition(), range);
-        if (Target == null && ObjTarget == null) return;
-        if (Target)
-        {
-            DistanceBetweenTarget();
-            DistanceBetweenObjectiveAndClosestTarget();
-        }
+        CalcDist();
     }
 
     public Unit GetClosestUnit(Vector3 position, float maxRange)
@@ -146,21 +150,34 @@ public class Targeting : MonoBehaviour
         return closestWithLowestHealth;
     }
 
-    private float DistanceBetweenTarget() => distance = Vector3.Distance(transform.position, target.transform.position);
-    private float DistanceBetweenObjectiveAndClosestTarget() => objDistTarget = Vector3.Distance(transform.position, objTarget.transform.position);
+    private float DistanceBetweenUnitAndTarget() => DistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+    private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objTarget.transform.position);
+    private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, ObjTarget.transform.position);
 
-    public bool GoForObjective()
+    private void CalcDist()
+    {
+        if (ObjTarget == null) return;
+        DistanceBetweenUnitAndObject();
+        if (Target == null) return;
+        DistanceBetweenUnitAndTarget();
+        DistanceBetweenObjectiveAndClosestTarget();
+    }
+
+    public bool GoToObjective()
     {
         if (Target == null)
         {
             return true;
         }
-        else if (distance >= objDistTarget)
+        else if (DistanceToObj <= DistanceToTarget)
         {
             return true;
         }
-        else
+        else if(DistanceToTarget < DistanceToObj)
+        {
             return false;
+        }
+        return true; 
     }
     private void OnDrawGizmos()
     {

@@ -1,6 +1,7 @@
 using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Moving : IState
@@ -22,11 +23,13 @@ public class Moving : IState
     public void ExitState(UnitStateController unitState)
     {
         Debug.Log("You are exiting at the Moving State");
+        path.canMove = false;
     }
     public void UpdateState(UnitStateController unitState)
     {
         Debug.Log("You are updating at the Moving State");
         SetAndMoveToTarget();
+        unitState.CheckTargetToAttack();
     }
     public void PhysicsUpdateState(UnitStateController unitState)
     {
@@ -39,15 +42,16 @@ public class Moving : IState
     void SetAndMoveToTarget()
     {
         path.canMove = false;
-        if (targeting.GoForObjective())
+        if (targeting.GoToObjective())
         {
             destinationSetter.target = targeting.ObjTarget.transform;
             path.canMove = true;
         }
-        if(!targeting.GoForObjective())
+        else if(!targeting.GoToObjective())
         {
             destinationSetter.target = targeting.Target.transform;
             path.canMove = true;
         }        
     }
+
 }

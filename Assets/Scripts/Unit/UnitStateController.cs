@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public interface IState
@@ -22,11 +23,19 @@ public enum CurrentState
 }
 public class UnitStateController : MonoBehaviour
 {
+    Targeting targeting;
+    UnitStats unitStats;
     // Start is called before the first frame update
     IState currentState;
     public CurrentState state;
     public Idle StateIdle = new Idle();
     public Moving StateMoving = new Moving();
+    public MeleeAttack StateMeleeAttack = new MeleeAttack();
+    private void Awake()
+    {
+        unitStats = GetComponent<UnitStats>();
+        targeting = GetComponent<Targeting>();
+    }               
     void Start()
     {
         if(currentState == null)
@@ -57,5 +66,60 @@ public class UnitStateController : MonoBehaviour
     {
         currentState = state;
         state.EnterState(this);
+    }
+    public void CheckTargetToAttack()
+    {
+        if(targeting.Target != null)
+        {
+            if (targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange)
+            {
+                //Switch To Range Combat
+            }
+            if (targeting.DistanceToTarget <= unitStats.UnitCloseRange /*|| targeting.ObjDistTarget <= unitStats.UnitCloseRange*/)
+            {
+                Debug.Log("targeting.Distance: " + targeting.DistanceToTarget);
+                Debug.Log("unitStats.UnitCloseRange: " + unitStats.UnitCloseRange);
+                SwitchState(StateMeleeAttack);
+            }
+        }
+        else if(targeting.ObjTarget != null)
+        {
+            if (targeting.DistanceToObj <= unitStats.UnitFarRange)
+            {
+                //Switch To Range Combat
+            }
+            if (targeting.DistanceToObj <= unitStats.UnitCloseRange /*|| targeting.ObjDistTarget <= unitStats.UnitCloseRange*/)
+            {
+                Debug.Log("targeting.DistanceToObj: " + targeting.DistanceToObj);
+                Debug.Log("unitStats.DistanceToObj: " + unitStats.UnitCloseRange);
+                SwitchState(StateMeleeAttack);
+            }
+        }
+
+    }
+    void SwitchState()
+    {
+        switch (state)
+        {
+            case CurrentState.Idle:
+                currentState = StateIdle;
+                break;
+            case CurrentState.Moving:
+                currentState = StateMoving;
+                break;
+            case CurrentState.RangedAttack:
+                break;
+            case CurrentState.CloseAttack:
+                currentState = StateMeleeAttack;
+                break;
+            case CurrentState.Support:
+                break;
+            case CurrentState.UsingInteractableAbility:
+                break;
+            case CurrentState.UsingPassiveAbility:
+                break;
+            default:
+                break;
+        }
     }
 }
