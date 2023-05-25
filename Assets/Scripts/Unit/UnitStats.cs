@@ -47,7 +47,7 @@ public class UnitStats : MonoBehaviour
 
     #region Properties
     public float UnitMaxHealth { get => maxHealth; set => maxHealth = value; }
-    public float UnitCurrentHealth { get => currentHealth; set => currentHealth = value; }
+    public float UnitCurrentHealth { get => currentHealth; set => currentHealth = Mathf.Clamp(value, 0, maxHealth); }
     public float UnitHealingSpeed { get => healingSpeed; set => healingSpeed = value; }
     public float UnitMorale { get => unitMorale; set => unitMorale = value; }
     public float UnitPreparationTime { get => preparationTime; set => preparationTime = value; }

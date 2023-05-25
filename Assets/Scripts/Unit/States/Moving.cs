@@ -7,23 +7,15 @@ public class Moving : IState
 {
     Targeting targeting;
     UnitStats unitStats;
-    Unit unit;
     AIPath path;
-
     AIDestinationSetter destinationSetter;
-    UnitObjective[] unitObjectives;
-    UnitObjective unitObjective;
     public void EnterState(UnitStateController unitState)
     {
         unitStats = unitState.GetComponent<UnitStats>();
         targeting = unitState.GetComponent<Targeting>();
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
-        unit = unitState.GetComponent<Unit>();
         unitState.state = CurrentState.Moving;
-        unitObjectives = Object.FindObjectsOfType<UnitObjective>();
-        BoxCollider2D boxCollider = unitState.GetComponent<BoxCollider2D>();
-        GetObjective(unitState);
         Debug.Log("You are at the Moving State"); 
 
     }
@@ -47,35 +39,15 @@ public class Moving : IState
     void SetAndMoveToTarget()
     {
         path.canMove = false;
-
-        if (targeting.Target == null)
+        if (targeting.GoForObjective())
         {
-            
-            destinationSetter.target = unitObjective.transform;
+            destinationSetter.target = targeting.ObjTarget.transform;
             path.canMove = true;
         }
-        else 
+        if(!targeting.GoForObjective())
         {
             destinationSetter.target = targeting.Target.transform;
             path.canMove = true;
-        }
-
-
-    }
-    void GetObjective(UnitStateController unitState)
-    {
-        foreach (var unitObj in unitObjectives)
-        {
-            if(unit.IsEnemy && unitObj.IsEnemy)
-            {
-                unitObjective = unitObj;
-                break;
-            }
-            else if(!unit.IsEnemy && unitObj.IsEnemy)
-            {
-                unitObjective = unitObj;
-                break;
-            }
-        }
+        }        
     }
 }
