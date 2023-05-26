@@ -50,9 +50,10 @@ public class UnitStateController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         //will call any logic in Update State
         currentState.UpdateState(this);
+        SwitchState();
     }
     void FixedUpdate()
     {
@@ -62,10 +63,14 @@ public class UnitStateController : MonoBehaviour
     {
         currentState.OnTriggerEnter2DState(this);
     }
-    public void SwitchState(IState state)
+    public void SwitchState(IState newState)
     {
-        currentState = state;
-        state.EnterState(this);
+        if (currentState != newState)
+        {
+            currentState.ExitState(this);
+            currentState = newState;
+            currentState.EnterState(this);
+        }
     }
     public void CheckTargetToAttack()
     {
@@ -102,15 +107,15 @@ public class UnitStateController : MonoBehaviour
         switch (state)
         {
             case CurrentState.Idle:
-                currentState = StateIdle;
+                SwitchState(StateIdle);
                 break;
             case CurrentState.Moving:
-                currentState = StateMoving;
+                SwitchState(StateMoving);
                 break;
             case CurrentState.RangedAttack:
                 break;
             case CurrentState.CloseAttack:
-                currentState = StateMeleeAttack;
+                SwitchState(StateMeleeAttack);
                 break;
             case CurrentState.Support:
                 break;

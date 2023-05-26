@@ -17,7 +17,8 @@ public class Moving : IState
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
         unitState.state = CurrentState.Moving;
-        Debug.Log("You are at the Moving State"); 
+        Debug.Log("You are at the Moving State");
+        path.canMove = true;
 
     }
     public void ExitState(UnitStateController unitState)
@@ -41,17 +42,20 @@ public class Moving : IState
     }
     void SetAndMoveToTarget()
     {
-        path.canMove = false;
+        if(targeting==null)
+        {
+            Debug.Log("targeting is null");
+        }
         if (targeting.GoToObjective())
         {
             destinationSetter.target = targeting.ObjTarget.transform;
-            path.canMove = true;
+            
         }
         else if(!targeting.GoToObjective())
         {
             destinationSetter.target = targeting.Target.transform;
-            path.canMove = true;
-        }        
+        }
+        
     }
 
 }

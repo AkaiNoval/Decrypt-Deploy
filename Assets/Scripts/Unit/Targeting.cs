@@ -165,19 +165,11 @@ public class Targeting : MonoBehaviour
 
     public bool GoToObjective()
     {
-        if (Target == null)
+        if (Target == null || DistanceToObj < DistanceToTarget)
         {
             return true;
         }
-        else if (DistanceToObj <= DistanceToTarget)
-        {
-            return true;
-        }
-        else if(DistanceToTarget < DistanceToObj)
-        {
-            return false;
-        }
-        return true; 
+        return false;
     }
     private void OnDrawGizmos()
     {
