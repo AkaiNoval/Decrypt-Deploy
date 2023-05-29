@@ -18,10 +18,12 @@ public class Targeting : MonoBehaviour
     [SerializeField] Unit target;// The current target
     [SerializeField] UnitObjective objTarget;
     UnitObjective[] objTargets;
-    [SerializeField] float range = 10f;  // The maximum range for selecting a target
+    [SerializeField] float range = 10f;  // The maximum range for selecting a target, if there are no targets in this radius => NULL
     [SerializeField] float distanceToTarget;
     [SerializeField] float distanceToObjective;
     [SerializeField] float distanceBetweenTargetAndObject;
+
+    [SerializeField] bool wasEnemy; // Flag to store the previous value of the isEnemy flag
 
     public Unit Target { get { return target; } set { target = value; } }
     public UnitObjective ObjTarget { get => objTarget; set => objTarget = value; }
@@ -34,25 +36,22 @@ public class Targeting : MonoBehaviour
         _unit = GetComponent<Unit>();
         unitStats = GetComponent<UnitStats>();
         objTargets = FindObjectsOfType<UnitObjective>();
-        foreach (var unitObj in objTargets)
-        {
-            if ((!_unit.IsEnemy && unitObj.IsEnemy) || (_unit.IsEnemy && !unitObj.IsEnemy))
-            {
-                objTarget = unitObj;
-                break; // Exit the loop once a suitable unitObjective is found
-            }
-        }
+        wasEnemy = _unit.IsEnemy;
+        GetObjective();
         CalcDist();
     }
-
-
-
     private void Update()
     {
         // Update the current target by finding the closest unit within range
-        Target = GetClosestUnit(_unit.GetPosition(), range);
-        CalcDist();
+        Target = GetClosestUnit(_unit.GetPosition(), range); // Store the previous value of IsEnemy
+        // Check if the value of IsEnemy has changed
+        if (_unit.IsEnemy != wasEnemy)
+        {
+            GetObjective(); // Update the objective
+        }
+        CalcDist(); // Calculate distances
     }
+
 
     public Unit GetClosestUnit(Vector3 position, float maxRange)
     {
@@ -154,6 +153,18 @@ public class Targeting : MonoBehaviour
     private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objTarget.transform.position);
     private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, ObjTarget.transform.position);
 
+    public void GetObjective()
+    {
+        foreach (var unitObj in objTargets)
+        {
+            if ((!_unit.IsEnemy && unitObj.IsEnemy) || (_unit.IsEnemy && !unitObj.IsEnemy))
+            {
+                objTarget = unitObj;
+                break; // Exit the loop once a suitable unitObjective is found
+            }
+        }
+        wasEnemy = _unit.IsEnemy;
+    }
     private void CalcDist()
     {
         if (ObjTarget == null) return;

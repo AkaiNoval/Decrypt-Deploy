@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class MeleeAttack : IState
 {
+    Transform meleeTransform;
+    UnitStats unitStats;
     public void EnterState(UnitStateController unitState)
     {
         unitState.state = CurrentState.CloseAttack;
+        unitStats = unitState.GetComponent<UnitStats>();
+        //meleeTransform = unitState.Fin
         Debug.Log("You are at the Melee State");
     }
 

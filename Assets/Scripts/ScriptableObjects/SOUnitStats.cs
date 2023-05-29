@@ -2,11 +2,8 @@ using UnityEngine;
 
 public enum Class
 {
-    Fighter,
-    Shooter,
-    Support,
-    Refugee,
-    Prisoner,
+    Attacker,
+    Supporter,
     Survivor
 }
 [CreateAssetMenu(fileName = "Stats", menuName = "Unit Stats")]
