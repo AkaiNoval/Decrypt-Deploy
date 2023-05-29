@@ -3,8 +3,7 @@ using UnityEngine;
 public enum Class
 {
     Attacker,
-    Supporter,
-    Survivor
+    Supporter
 }
 [CreateAssetMenu(fileName = "Stats", menuName = "Unit Stats")]
 public class SOUnitStats : ScriptableObject
