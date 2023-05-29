@@ -31,6 +31,10 @@ public class UnitStateController : MonoBehaviour
     public Idle StateIdle = new Idle();
     public Moving StateMoving = new Moving();
     public MeleeAttack StateMeleeAttack = new MeleeAttack();
+    public RangedAttack StateRangeAttack = new RangedAttack();
+    public Support StateSupport = new Support();
+    public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
+    public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
     private void Awake()
     {
         unitStats = GetComponent<UnitStats>();
@@ -40,10 +44,10 @@ public class UnitStateController : MonoBehaviour
     {
         if(currentState == null)
         {
-            currentState = StateIdle;
+            currentState = StateMoving;
         }
         //starting state for the state machine
-        currentState = StateIdle;
+        currentState = StateMoving;
         // "this" is a reference to the context(THIS script)
         currentState.EnterState(this);
     }
@@ -119,15 +123,19 @@ public class UnitStateController : MonoBehaviour
                 SwitchState(StateMoving);
                 break;
             case CurrentState.RangedAttack:
+                SwitchState(StateRangeAttack);
                 break;
             case CurrentState.CloseAttack:
                 SwitchState(StateMeleeAttack);
                 break;
             case CurrentState.Support:
+                SwitchState(StateSupport);
                 break;
             case CurrentState.UsingActiveAbility:
+                SwitchState(StateActiveAbility);
                 break;
             case CurrentState.UsingPassiveAbility:
+                SwitchState(StatePassiveAbility);
                 break;
             default:
                 break;

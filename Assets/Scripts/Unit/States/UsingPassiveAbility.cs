@@ -2,17 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UsingPassiveAbility : MonoBehaviour
+public class UsingPassiveAbility : IState
 {
-    // Start is called before the first frame update
-    void Start()
+    public void EnterState(UnitStateController unitState)
     {
-        
+       
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ExitState(UnitStateController unitState)
     {
-        
+     
+    }
+
+    public void OnTriggerEnter2DState(UnitStateController unitState)
+    {
+     
+    }
+
+    public void PhysicsUpdateState(UnitStateController unitState)
+    {
+    
+    }
+
+    public void UpdateState(UnitStateController unitState)
+    {
+
     }
 }
