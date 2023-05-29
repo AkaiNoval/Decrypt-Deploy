@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public bool isEnemy;
-
+    [SerializeField] bool isEnemy;
+    UnitStats unitStats;
     public bool IsEnemy
     {
         get { return isEnemy; } // Getter for the isEnemy flag
@@ -18,31 +19,18 @@ public class Unit : MonoBehaviour
             }
         }
     }
-    private void OnValidate()
+    private void Awake()
     {
-        /*
-        By adding the OnValidate() method, it will be called whenever the Inspector values are changed. 
-        This way, even if you modify the isEnemy field directly in the Inspector, 
-        the UpdateUnitList() method will be triggered, 
-        ensuring the unit is correctly added or removed from the appropriate list.
-         */
-        UpdateUnitList();
+        unitStats = GetComponent<UnitStats>();
     }
-
-    private void OnEnable()
-    {
-        UpdateUnitList();
-    }
-
-    private void OnDisable()
-    {
-        UpdateUnitList();
-    }
-
+    private void OnValidate() => UpdateUnitList();
+    private void OnEnable() => UpdateUnitList();
+    private void OnDisable() => UpdateUnitList();
     private void UpdateUnitList()
     {
         if (UnitManager.AllyList.Contains(this)) UnitManager.AllyList.Remove(this);
         if (UnitManager.EnemyList.Contains(this)) UnitManager.EnemyList.Remove(this);
+        //if(IsDead) return;
         if (isEnemy)
         {
             if (!gameObject.activeInHierarchy) return;
@@ -54,4 +42,7 @@ public class Unit : MonoBehaviour
             UnitManager.AllyList.Add(this);          
         }
     }
+
+    public Vector3 GetPosition() => transform.position;
+    public bool IsDead() => unitStats.UnitCurrentHealth <= 0;
 }
