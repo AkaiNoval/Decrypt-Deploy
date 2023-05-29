@@ -19,6 +19,7 @@ public class Moving : IState
         unitState.state = CurrentState.Moving;
         Debug.Log("You are at the Moving State");
         path.canMove = true;
+        path.maxSpeed = unitStats.UnitSpeed;
 
     }
     public void ExitState(UnitStateController unitState)
@@ -30,7 +31,7 @@ public class Moving : IState
     {
         Debug.Log("You are updating at the Moving State");
         SetAndMoveToTarget();
-        unitState.CheckTargetToAttack();
+        unitState.CheckTargetToSwitchState();
     }
     public void PhysicsUpdateState(UnitStateController unitState)
     {
@@ -42,20 +43,21 @@ public class Moving : IState
     }
     void SetAndMoveToTarget()
     {
-        if(targeting==null)
-        {
-            Debug.Log("targeting is null");
-        }
+        Transform targetTransform = null;
+        // Check if the objective should be the target
         if (targeting.GoToObjective())
         {
-            destinationSetter.target = targeting.ObjTarget.transform;
-            
+            // If the objective target is not null, set it as the target transform
+            targetTransform = targeting.ObjTarget != null ? targeting.ObjTarget.transform : null;
         }
-        else if(!targeting.GoToObjective())
+        else
         {
-            destinationSetter.target = targeting.Target.transform;
+            // If the objective target is not selected, set the primary target as the target transform
+            targetTransform = targeting.Target != null ? targeting.Target.transform : null;
         }
-        
+        // Set the target transform in the destination setter
+        destinationSetter.target = targetTransform;
     }
+
 
 }

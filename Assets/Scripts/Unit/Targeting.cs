@@ -16,7 +16,7 @@ public class Targeting : MonoBehaviour
     Unit _unit;  // Reference to the unit this script is attached to
     [SerializeField] TargetSeeker targetSeeker;  // The strategy for selecting the target
     [SerializeField] Unit target;// The current target
-    [SerializeField] UnitObjective objTarget;
+    [SerializeField] UnitObjective objectiveTarget;
     UnitObjective[] objTargets;
     [SerializeField] float range = 10f;  // The maximum range for selecting a target, if there are no targets in this radius => NULL
     [SerializeField] float distanceToTarget;
@@ -26,7 +26,7 @@ public class Targeting : MonoBehaviour
     [SerializeField] bool wasEnemy; // Flag to store the previous value of the isEnemy flag
 
     public Unit Target { get { return target; } set { target = value; } }
-    public UnitObjective ObjTarget { get => objTarget; set => objTarget = value; }
+    public UnitObjective ObjTarget { get => objectiveTarget; set => objectiveTarget = value; }
     public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
@@ -150,7 +150,7 @@ public class Targeting : MonoBehaviour
     }
 
     private float DistanceBetweenUnitAndTarget() => DistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-    private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objTarget.transform.position);
+    private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objectiveTarget.transform.position);
     private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, ObjTarget.transform.position);
 
     public void GetObjective()
@@ -159,7 +159,7 @@ public class Targeting : MonoBehaviour
         {
             if ((!_unit.IsEnemy && unitObj.IsEnemy) || (_unit.IsEnemy && !unitObj.IsEnemy))
             {
-                objTarget = unitObj;
+                objectiveTarget = unitObj;
                 break; // Exit the loop once a suitable unitObjective is found
             }
         }
@@ -174,14 +174,33 @@ public class Targeting : MonoBehaviour
         DistanceBetweenObjectiveAndClosestTarget();
     }
 
-    public bool GoToObjective()
+    public bool GoToObjective() //Called by Moving State to get the Transform
     {
-        if (Target == null || DistanceToObj < DistanceToTarget)
+        switch (unitStats.UnitClass)
         {
-            return true;
+            case Class.Attacker:
+                // If the primary target is null or the distance to the objective is shorter than the distance to the primary target
+                // Attacker units should go to the objective
+                if (Target == null || DistanceToObj < DistanceToTarget)
+                {
+                    return true;
+                }
+                break;
+            case Class.Supporter:
+                // If the primary target is null
+                // Supporter units should go to the objective
+                if (Target == null)
+                {
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
+        // If none of the conditions are met, return false
         return false;
     }
+
     private void OnDrawGizmos()
     {
         if (!showGizmos) return;

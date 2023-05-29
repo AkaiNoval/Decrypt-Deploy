@@ -18,7 +18,7 @@ public enum CurrentState
     RangedAttack,
     CloseAttack,
     Support,
-    UsingInteractableAbility,
+    UsingActiveAbility,
     UsingPassiveAbility
 }
 public class UnitStateController : MonoBehaviour
@@ -72,35 +72,41 @@ public class UnitStateController : MonoBehaviour
             currentState.EnterState(this);
         }
     }
-    public void CheckTargetToAttack()
+    public void CheckTargetToSwitchState()
     {
-        if(targeting.Target != null)
+        bool hasTarget = targeting.Target != null;
+        bool hasObjTarget = targeting.ObjTarget != null;
+        bool isWithinFarRange = false;
+        bool isWithinCloseRange = false;
+        if (hasTarget)
         {
-            if (targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange)
+            isWithinFarRange = targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange;
+            isWithinCloseRange = targeting.DistanceToTarget <= unitStats.UnitCloseRange;
+        }
+        else if (hasObjTarget)
+        {
+            isWithinFarRange = targeting.DistanceToObj <= unitStats.UnitFarRange;
+            isWithinCloseRange = targeting.DistanceToObj <= unitStats.UnitCloseRange;
+        }
+        if (isWithinFarRange)
+        {
+            // Switch to range combat
+            // TODO: Add code to switch to range combat
+        }
+        if (isWithinCloseRange)
+        {
+            switch (unitStats.UnitClass)
             {
-                //Switch To Range Combat
-            }
-            if (targeting.DistanceToTarget <= unitStats.UnitCloseRange /*|| targeting.ObjDistTarget <= unitStats.UnitCloseRange*/)
-            {
-                Debug.Log("targeting.Distance: " + targeting.DistanceToTarget);
-                Debug.Log("unitStats.UnitCloseRange: " + unitStats.UnitCloseRange);
-                SwitchState(StateMeleeAttack);
+                case Class.Attacker:
+                    SwitchState(StateMeleeAttack);
+                    break;
+                case Class.Supporter:
+                    Debug.Log("SwitchState(StateSupport)");
+                    break;
+                default:
+                    break;
             }
         }
-        else if(targeting.ObjTarget != null)
-        {
-            if (targeting.DistanceToObj <= unitStats.UnitFarRange)
-            {
-                //Switch To Range Combat
-            }
-            if (targeting.DistanceToObj <= unitStats.UnitCloseRange /*|| targeting.ObjDistTarget <= unitStats.UnitCloseRange*/)
-            {
-                Debug.Log("targeting.DistanceToObj: " + targeting.DistanceToObj);
-                Debug.Log("unitStats.DistanceToObj: " + unitStats.UnitCloseRange);
-                SwitchState(StateMeleeAttack);
-            }
-        }
-
     }
     void SwitchState()
     {
@@ -119,7 +125,7 @@ public class UnitStateController : MonoBehaviour
                 break;
             case CurrentState.Support:
                 break;
-            case CurrentState.UsingInteractableAbility:
+            case CurrentState.UsingActiveAbility:
                 break;
             case CurrentState.UsingPassiveAbility:
                 break;

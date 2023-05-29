@@ -10,7 +10,7 @@ public class SOUnitStats : ScriptableObject
 {
     [Header("Info")]
     public string Name; //Lock
-    public string ID; //Lock
+    public string ID; //Lock => Bester ID management
     public Class Class; //Lock
     public float PreparationTime;//CanChange
     public int Cost;//CanChange

@@ -31,7 +31,7 @@ public class Idle : IState
             Debug.Log("isMoving");
             unitState.SwitchState(unitState.StateMoving);
         }
-        unitState.CheckTargetToAttack();
+        unitState.CheckTargetToSwitchState();
     }
     public void PhysicsUpdateState(UnitStateController unitState)
     {
