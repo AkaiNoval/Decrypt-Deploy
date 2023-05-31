@@ -149,9 +149,13 @@ public class Targeting : MonoBehaviour
         return closestWithLowestHealth;
     }
 
-    private float DistanceBetweenUnitAndTarget() => DistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-    private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objectiveTarget.transform.position);
-    private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, Objective.transform.position);
+    public float DistanceBetweenUnitAndTarget()
+    {
+        if (Target == null) return 0f;
+        else return DistanceToTarget = Vector3.Distance(this.transform.position, target.transform.position); 
+    }
+    public float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(this.transform.position, objectiveTarget.transform.position);
+    public float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, Objective.transform.position);
 
     public void GetObjective()
     {

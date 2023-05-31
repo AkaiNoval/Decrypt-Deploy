@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1832543262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1832543263}
+  m_Layer: 6
+  m_Name: MeleeTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1832543263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832543262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2149214066858227067}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2149214066858227066
 GameObject:
   m_ObjectHideFlags: 0
@@ -20,7 +51,7 @@ GameObject:
   - component: {fileID: 1318764359}
   - component: {fileID: 1318764360}
   - component: {fileID: 1318764362}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ally
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +69,8 @@ Transform:
   m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1832543263}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -62,7 +94,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -156,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e200b67a34b91419562f09013428fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soStats: {fileID: 11400000, guid: 38b055238ccc3b64b999609fd872d341, type: 2}
+  soStats: {fileID: 11400000, guid: 5f9c60c728ec186438234a675bb6a29a, type: 2}
   unitName: 
   unitID: 
   unitClass: 0
@@ -204,8 +236,12 @@ MonoBehaviour:
   showGizmos: 1
   targetSeeker: 0
   target: {fileID: 0}
+  objectiveTarget: {fileID: 0}
   range: 10
-  distance: 0
+  distanceToTarget: 0
+  distanceToObjective: 0
+  distanceBetweenTargetAndObject: 0
+  wasEnemy: 0
 --- !u!114 &1318764356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963ec42afa64a6d4a8d86c63be70de3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateSwitchDelay: 3
   state: 0
 --- !u!114 &1318764358
 MonoBehaviour:
@@ -249,7 +286,7 @@ MonoBehaviour:
   radius: 0.5
   height: 2
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 0
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2

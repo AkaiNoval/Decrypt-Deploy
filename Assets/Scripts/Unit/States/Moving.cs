@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class Moving : IState
 {
-    Targeting targeting;
+
     UnitStats unitStats;
     AIPath path;
     AIDestinationSetter destinationSetter;
     public void EnterState(UnitStateController unitState)
     {
         unitStats = unitState.GetComponent<UnitStats>();
-        targeting = unitState.GetComponent<Targeting>();
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
         unitState.state = CurrentState.Moving;
@@ -29,9 +28,6 @@ public class Moving : IState
     }
     public void UpdateState(UnitStateController unitState)
     {
-        Debug.Log("You are updating at the Moving State");
-        SetAndMoveToTarget();
-        unitState.CheckTargetToSwitchState();
     }
     public void PhysicsUpdateState(UnitStateController unitState)
     {
@@ -41,19 +37,19 @@ public class Moving : IState
     {
         Debug.Log("OnTriggerEnter at the Moving State");
     }
-    void SetAndMoveToTarget()
+    void SetAndMoveToTarget(UnitStateController unitState)
     {
         Transform targetTransform = null;
         // Check if the objective should be the target
-        if (targeting.GoToObjective())
+        if (unitState.Targeting.GoToObjective())
         {
             // If the objective target is not null, set it as the target transform
-            targetTransform = targeting.Objective != null ? targeting.Objective.transform : null;
+            targetTransform = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.transform : null;
         }
         else
         {
             // If the objective target is not selected, set the primary target as the target transform
-            targetTransform = targeting.Target != null ? targeting.Target.transform : null;
+            targetTransform = unitState.Targeting.Target != null ? unitState.Targeting.Target.transform : null;
         }
         // Set the target transform in the destination setter
         destinationSetter.target = targetTransform;

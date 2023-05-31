@@ -28,8 +28,8 @@ MonoBehaviour:
   Speed: 1
   Agility: 50
   DodgeChance: 25
-  CloseRange: 2
-  FarRange: 10
+  CloseRange: 3
+  FarRange: 0
   Accuracy: 75
   CriticalChance: 10
   CriticalDamage: 10

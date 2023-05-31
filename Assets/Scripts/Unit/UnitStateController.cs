@@ -23,7 +23,7 @@ public enum CurrentState
 }
 public class UnitStateController : MonoBehaviour
 {
-    [SerializeField] float stateSwitchingDelay;
+    [SerializeField] float stateSwitchDelay;
     Targeting targeting;
     UnitStats unitStats;
     // Start is called before the first frame update
@@ -36,19 +36,23 @@ public class UnitStateController : MonoBehaviour
     public Support StateSupport = new Support();
     public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
     public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
+
+    public Targeting Targeting { get => targeting; set => targeting = value; }
+    public UnitStats UnitStats { get => unitStats; set => unitStats = value; }
+
     private void Awake()
     {
-        unitStats = GetComponent<UnitStats>();
-        targeting = GetComponent<Targeting>();
+        UnitStats = GetComponent<UnitStats>();
+        Targeting = GetComponent<Targeting>();
     }               
     void Start()
     {
         if(currentState == null)
         {
-            currentState = StateMoving;
+            currentState = StateIdle;
         }
         //starting state for the state machine
-        currentState = StateMoving;
+        currentState = StateIdle;
         // "this" is a reference to the context(THIS script)
         currentState.EnterState(this);
     }
@@ -56,6 +60,7 @@ public class UnitStateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
+
         //will call any logic in Update State
         currentState.UpdateState(this);
         //Manually Switch State
@@ -69,51 +74,67 @@ public class UnitStateController : MonoBehaviour
     {
         currentState.OnTriggerEnter2DState(this);
     }
+    //public void SwitchState(IState newState)
+    //{
+    //    if (currentState != newState)
+    //    {
+    //        currentState.ExitState(this);
+    //        currentState = newState;
+    //        currentState.EnterState(this);
+    //    }
+    //}
     public void SwitchState(IState newState)
     {
         if (currentState != newState)
         {
-            currentState.ExitState(this);
-            currentState = newState;
-            currentState.EnterState(this);
+            StartCoroutine(DelayedStateSwitch(newState));
         }
     }
-    public void CheckTargetToSwitchState()
+    IEnumerator DelayedStateSwitch(IState newState)
     {
-        bool hasTarget = targeting.Target != null;
-        bool hasObjTarget = targeting.Objective != null;
-        bool isWithinFarRange = false;
-        bool isWithinCloseRange = false;
-        if (hasTarget)
-        {
-            isWithinFarRange = targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange;
-            isWithinCloseRange = targeting.DistanceToTarget <= unitStats.UnitCloseRange;
-        }
-        else if (hasObjTarget)
-        {
-            isWithinFarRange = targeting.DistanceToObj <= unitStats.UnitFarRange;
-            isWithinCloseRange = targeting.DistanceToObj <= unitStats.UnitCloseRange;
-        }
-        if (isWithinFarRange)
-        {
-            // Switch to range combat
-            // TODO: Add code to switch to range combat
-        }
-        if (isWithinCloseRange)
-        {
-            switch (unitStats.UnitClass)
-            {
-                case Class.Attacker:
-                    SwitchState(StateMeleeAttack);
-                    break;
-                case Class.Supporter:
-                    Debug.Log("SwitchState(StateSupport)");
-                    break;
-                default:
-                    break;
-            }
-        }
+        currentState.ExitState(this);
+
+        yield return new WaitForSeconds(stateSwitchDelay);
+
+        currentState = newState;
+        currentState.EnterState(this); 
     }
+    //public void CheckTargetToSwitchState()
+    //{
+    //    bool hasTarget = targeting.Target != null;
+    //    bool hasObjTarget = targeting.Objective != null;
+    //    bool isWithinFarRange = false;
+    //    bool isWithinCloseRange = false;
+    //    if (hasTarget)
+    //    {
+    //        isWithinFarRange = targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange;
+    //        isWithinCloseRange = targeting.DistanceToTarget <= unitStats.UnitCloseRange;
+    //    }
+    //    else if (hasObjTarget)
+    //    {
+    //        isWithinFarRange = targeting.DistanceToObj <= unitStats.UnitFarRange;
+    //        isWithinCloseRange = targeting.DistanceToObj <= unitStats.UnitCloseRange;
+    //    }
+    //    if (isWithinFarRange)
+    //    {
+    //        // Switch to range combat
+    //        // TODO: Add code to switch to range combat
+    //    }
+    //    if (isWithinCloseRange)
+    //    {
+    //        switch (unitStats.UnitClass)
+    //        {
+    //            case Class.Attacker:
+    //                SwitchState(StateMeleeAttack);
+    //                break;
+    //            case Class.Supporter:
+    //                Debug.Log("SwitchState(StateSupport)");
+    //                break;
+    //            default:
+    //                break;
+    //        }
+    //    }
+    //}
     void SwitchState()
     {
         switch (state)
