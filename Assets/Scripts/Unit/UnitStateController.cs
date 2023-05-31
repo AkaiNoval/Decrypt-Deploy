@@ -23,6 +23,7 @@ public enum CurrentState
 }
 public class UnitStateController : MonoBehaviour
 {
+    [SerializeField] float stateSwitchingDelay;
     Targeting targeting;
     UnitStats unitStats;
     // Start is called before the first frame update
@@ -57,6 +58,7 @@ public class UnitStateController : MonoBehaviour
     {   
         //will call any logic in Update State
         currentState.UpdateState(this);
+        //Manually Switch State
         SwitchState();
     }
     void FixedUpdate()
@@ -79,7 +81,7 @@ public class UnitStateController : MonoBehaviour
     public void CheckTargetToSwitchState()
     {
         bool hasTarget = targeting.Target != null;
-        bool hasObjTarget = targeting.ObjTarget != null;
+        bool hasObjTarget = targeting.Objective != null;
         bool isWithinFarRange = false;
         bool isWithinCloseRange = false;
         if (hasTarget)

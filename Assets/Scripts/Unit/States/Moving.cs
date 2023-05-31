@@ -48,7 +48,7 @@ public class Moving : IState
         if (targeting.GoToObjective())
         {
             // If the objective target is not null, set it as the target transform
-            targetTransform = targeting.ObjTarget != null ? targeting.ObjTarget.transform : null;
+            targetTransform = targeting.Objective != null ? targeting.Objective.transform : null;
         }
         else
         {

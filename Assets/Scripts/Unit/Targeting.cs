@@ -26,7 +26,7 @@ public class Targeting : MonoBehaviour
     [SerializeField] bool wasEnemy; // Flag to store the previous value of the isEnemy flag
 
     public Unit Target { get { return target; } set { target = value; } }
-    public UnitObjective ObjTarget { get => objectiveTarget; set => objectiveTarget = value; }
+    public UnitObjective Objective { get => objectiveTarget; set => objectiveTarget = value; }
     public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
@@ -151,7 +151,7 @@ public class Targeting : MonoBehaviour
 
     private float DistanceBetweenUnitAndTarget() => DistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
     private float DistanceBetweenUnitAndObject() => DistanceToObj = Vector3.Distance(transform.position, objectiveTarget.transform.position);
-    private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, ObjTarget.transform.position);
+    private float DistanceBetweenObjectiveAndClosestTarget() => DistBetweenTargetAndObject = Vector3.Distance(target.transform.position, Objective.transform.position);
 
     public void GetObjective()
     {
@@ -167,7 +167,7 @@ public class Targeting : MonoBehaviour
     }
     private void CalcDist()
     {
-        if (ObjTarget == null) return;
+        if (Objective == null) return;
         DistanceBetweenUnitAndObject();
         if (Target == null) return;
         DistanceBetweenUnitAndTarget();

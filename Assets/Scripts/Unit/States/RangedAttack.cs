@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RangedAttack : IState
 {
+ 
+    //Play Reload animation when out of bullets but also when there is no target in range
+    //Ref to the magazine
     public void EnterState(UnitStateController unitState)
     {
    
