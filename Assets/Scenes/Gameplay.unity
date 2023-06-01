@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 1
-  objectiveHealth: 1000
+  objectiveCurrentHealth: 0
+  maxHealth: 1000
   objectiveLevel: 5
 --- !u!61 &490093475
 BoxCollider2D:
@@ -716,7 +717,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 0
-  objectiveHealth: 1000
+  objectiveCurrentHealth: 0
+  maxHealth: 0
   objectiveLevel: 5
 --- !u!61 &1945669799
 BoxCollider2D:

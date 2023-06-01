@@ -46,4 +46,4 @@ MonoBehaviour:
   FireResistance: 0
   CryoResistance: 0
   ElectrifiedResistance: 0
-  ExplosionResistance: 0
+  ExplosionResistance: 20
