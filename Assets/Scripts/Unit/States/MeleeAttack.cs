@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -19,14 +19,7 @@ public class MeleeAttack : IState
     // Fixed by using Solution 2 => Waiting for Solution 1
     public void DealDamage(UnitStateController unitState)
     {
-        // Check if there is no target or if the target is not within the close range
-        if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
-        {
-            return; // Exit the method if the conditions are not met
-        }
-        UnitStats targetStats = unitState.Targeting.Target.GetComponent<UnitStats>();
-        float reducedDamage = targetStats.CalculateReducedDamage(unitState.UnitStats.UnitMeleeDamage);
-        targetStats.UnitCurrentHealth -= reducedDamage;
+        DealDamageToTarget(unitState);
 
         DealDamageToObjective(unitState);
     }
@@ -35,32 +28,33 @@ public class MeleeAttack : IState
     {
         var targeting = unitState.Targeting;
         var distanceToTarget = targeting.DistanceToTarget;
-
+        var distanceToObj = unitState.Targeting.DistanceToObj;
         switch (unitState.UnitStats.UnitClass)
         {
             case Class.Attacker:
-                // If the target is within the close range of the unit or the objective is within the close range
-                //if (distanceToTarget <= unitState.UnitStats.UnitCloseRange || targeting.DistanceToObj <= unitState.UnitStats.UnitCloseRange)
-                //{
-                //    Debug.Log("Can't Switch");
-                //    return;
-                //}
-                // If the target is within the range for ranged attack
-                if (distanceToTarget > unitState.UnitStats.UnitCloseRange && distanceToTarget <= unitState.UnitStats.UnitFarRange)
-                    unitState.SwitchState(unitState.StateRangeAttack);
-                // If the target is outside the close range and far range, or there is no target
-                else if (distanceToTarget > unitState.UnitStats.UnitCloseRange && distanceToTarget > unitState.UnitStats.UnitFarRange || targeting.Target == null)
+                // If there is a target but it is farther than the objective and the objective is in the close range, keep the melee state
+                if (targeting.Target != null && distanceToTarget > distanceToObj && distanceToObj <= unitState.UnitStats.UnitCloseRange)
+                    return;
+                // If there is a target but it is closer to the objective and the objective is out of the close range, switch to the moving state
+                if (targeting.Target != null && distanceToTarget < distanceToObj && distanceToObj > unitState.UnitStats.UnitCloseRange && distanceToTarget > unitState.UnitStats.UnitCloseRange)
+                {
+                    unitState.SwitchState(unitState.StateMoving);
+                    return;
+                }
+                // If there is no target and the objective is in the close range, keep the melee state
+                if (targeting.Target == null && distanceToObj <= unitState.UnitStats.UnitCloseRange)
+                    return;
+                // If there is no target and the objective is outside of the close range, switch to the moving state
+                if (targeting.Target == null && distanceToObj > unitState.UnitStats.UnitCloseRange)
                     unitState.SwitchState(unitState.StateMoving);
                 break;
             case Class.Supporter:
                 // If there are no enemies nearby and no target
                 if (!unitState.CheckEnemyForSupporter() && targeting.Target == null)
                     unitState.SwitchState(unitState.StateIdle);
-
-                // If there is no target, return without switching state
-                if (targeting.Target == null)
+                // If there is no target and there is an enemy in close range, melee attacking.
+                if (targeting.Target == null && unitState.CheckEnemyForSupporter())
                     return;
-
                 // If the target is within the close range but outside the far range
                 if (distanceToTarget <= unitState.UnitStats.UnitCloseRange && distanceToTarget > unitState.UnitStats.UnitFarRange)
                     unitState.SwitchState(unitState.StateSupport);
@@ -71,6 +65,17 @@ public class MeleeAttack : IState
     {
         if (unitState.Targeting.DistanceToObj > unitState.UnitStats.UnitCloseRange) return;
         unitState.Targeting.Objective.ObjectiveCurrentHealth -= unitState.UnitStats.UnitMeleeDamage;
+    }
+    void DealDamageToTarget(UnitStateController unitState)
+    {
+        // Check if there is no target or if the target is not within the close range
+        if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
+        {
+            return; // Exit the method if the conditions are not met
+        }
+        UnitStats targetStats = unitState.Targeting.Target.GetComponent<UnitStats>();
+        float reducedDamage = targetStats.CalculateReducedDamage(unitState.UnitStats.UnitMeleeDamage);
+        targetStats.UnitCurrentHealth -= reducedDamage;
     }
     #region Nothing here
     public void ExitState(UnitStateController unitState) { }

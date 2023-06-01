@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class Moving : IState
 {
-    AILerp path;
+    AIPath path;
     AIDestinationSetter destinationSetter;
     float previousSpeed;
     public void EnterState(UnitStateController unitState)
     {
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
-        path = unitState.GetComponent<AILerp>();
+        path = unitState.GetComponent<AIPath>();
         Debug.Log("You are at the Moving State");
         unitState.state = CurrentState.Moving;
         path.canMove = true;
         previousSpeed = unitState.UnitStats.UnitSpeed;
-        path.speed = unitState.UnitStats.UnitSpeed;
+        path.maxSpeed = unitState.UnitStats.UnitSpeed;
     }
     public void ExitState(UnitStateController unitState)
     {
