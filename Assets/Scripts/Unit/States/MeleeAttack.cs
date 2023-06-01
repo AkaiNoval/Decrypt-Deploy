@@ -61,11 +61,6 @@ public class MeleeAttack : IState
                 break;
         }
     }
-    void DealDamageToObjective(UnitStateController unitState)
-    {
-        if (unitState.Targeting.DistanceToObj > unitState.UnitStats.UnitCloseRange) return;
-        unitState.Targeting.Objective.ObjectiveCurrentHealth -= unitState.UnitStats.UnitMeleeDamage;
-    }
     void DealDamageToTarget(UnitStateController unitState)
     {
         // Check if there is no target or if the target is not within the close range
@@ -74,9 +69,29 @@ public class MeleeAttack : IState
             return; // Exit the method if the conditions are not met
         }
         UnitStats targetStats = unitState.Targeting.Target.GetComponent<UnitStats>();
-        float reducedDamage = targetStats.CalculateReducedDamage(unitState.UnitStats.UnitMeleeDamage);
+
+        // Calculate the base damage
+        float baseDamage = unitState.UnitStats.UnitMeleeDamage;
+
+        // Check for critical hit
+        bool isCriticalHit = UnityEngine.Random.value <= unitState.UnitStats.UnitCriticalChance / 100f;
+
+        // Apply critical damage multiplier if it's a critical hit
+        float damageMultiplier = isCriticalHit ? (1f + unitState.UnitStats.UnitCriticalDamage / 100f) : 1f;
+
+        // Calculate the final damage
+        float reducedDamage = targetStats.CalculateReducedDamage(baseDamage * damageMultiplier, isCriticalHit);
+
+        // Reduce the target's health by the damage amount
         targetStats.UnitCurrentHealth -= reducedDamage;
     }
+
+    void DealDamageToObjective(UnitStateController unitState)
+    {
+        if (unitState.Targeting.DistanceToObj > unitState.UnitStats.UnitCloseRange) return;
+        unitState.Targeting.Objective.ObjectiveCurrentHealth -= unitState.UnitStats.UnitMeleeDamage;
+    }
+
     #region Nothing here
     public void ExitState(UnitStateController unitState) { }
     public void OnTriggerEnter2DState(UnitStateController unitState) { }

@@ -131,10 +131,14 @@ public class UnitStats : MonoBehaviour
     {
         UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed*Time.deltaTime,0,UnitMaxHealth);
     }
-    public float CalculateReducedDamage(float incomingDamage)
+    public float CalculateReducedDamage(float incomingDamage, bool isCritical)
     {
         float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
         float reducedDamage = incomingDamage * (1f - damageReduction);
+        if (isCritical)
+        {
+            Debug.Log("isCritical");
+        }
         return Mathf.RoundToInt(reducedDamage);
     }
 }
