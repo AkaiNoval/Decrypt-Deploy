@@ -28,6 +28,7 @@ public class UnitStateController : MonoBehaviour
     UnitStats unitStats;
     // Start is called before the first frame update
     IState currentState;
+    LayerMask targetLayers;
     public CurrentState state;
     public Idle StateIdle = new Idle();
     public Moving StateMoving = new Moving();
@@ -44,6 +45,7 @@ public class UnitStateController : MonoBehaviour
     {
         UnitStats = GetComponent<UnitStats>();
         Targeting = GetComponent<Targeting>();
+        targetLayers = LayerMask.GetMask("Unit");
     }               
     void Start()
     {
@@ -74,15 +76,6 @@ public class UnitStateController : MonoBehaviour
     {
         currentState.OnTriggerEnter2DState(this);
     }
-    //public void SwitchState(IState newState)
-    //{
-    //    if (currentState != newState)
-    //    {
-    //        currentState.ExitState(this);
-    //        currentState = newState;
-    //        currentState.EnterState(this);
-    //    }
-    //}
     public void SwitchState(IState newState)
     {
         if (currentState != newState)
@@ -99,42 +92,6 @@ public class UnitStateController : MonoBehaviour
         currentState = newState;
         currentState.EnterState(this); 
     }
-    //public void CheckTargetToSwitchState()
-    //{
-    //    bool hasTarget = targeting.Target != null;
-    //    bool hasObjTarget = targeting.Objective != null;
-    //    bool isWithinFarRange = false;
-    //    bool isWithinCloseRange = false;
-    //    if (hasTarget)
-    //    {
-    //        isWithinFarRange = targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange;
-    //        isWithinCloseRange = targeting.DistanceToTarget <= unitStats.UnitCloseRange;
-    //    }
-    //    else if (hasObjTarget)
-    //    {
-    //        isWithinFarRange = targeting.DistanceToObj <= unitStats.UnitFarRange;
-    //        isWithinCloseRange = targeting.DistanceToObj <= unitStats.UnitCloseRange;
-    //    }
-    //    if (isWithinFarRange)
-    //    {
-    //        // Switch to range combat
-    //        // TODO: Add code to switch to range combat
-    //    }
-    //    if (isWithinCloseRange)
-    //    {
-    //        switch (unitStats.UnitClass)
-    //        {
-    //            case Class.Attacker:
-    //                SwitchState(StateMeleeAttack);
-    //                break;
-    //            case Class.Supporter:
-    //                Debug.Log("SwitchState(StateSupport)");
-    //                break;
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //}
     void SwitchState()
     {
         switch (state)
@@ -163,5 +120,26 @@ public class UnitStateController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void TriggerMeleeAttack()
+    {
+        // Call the DealDamage method in the MeleeAttack state
+        StateMeleeAttack.DealDamage(this);
+    }
+    public bool CheckEnemyForSupporter()
+    {
+        Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(transform.position, UnitStats.UnitCloseRange, targetLayers);
+        // Check if any enemies are found within the specified range
+        foreach (var enemyCollider in enemiesColliders)
+        {
+            Unit enemyUnit = enemyCollider.GetComponent<Unit>();
+            // Check if the collider belongs to an enemy unit
+            if (enemyUnit != null && enemyUnit.IsEnemy)
+            {
+                return true; // Return true if an enemy is found
+            }
+        }
+        return false; // Return false if no enemies are found
     }
 }

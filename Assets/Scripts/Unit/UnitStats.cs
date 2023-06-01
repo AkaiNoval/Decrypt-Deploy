@@ -123,12 +123,18 @@ public class UnitStats : MonoBehaviour
         UnitExplosionResistance = soStats.ExplosionResistance;
     }
 
+    private void Update()
+    {
+        PassiveHealing();
+    }
     void PassiveHealing()
     {
-        UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed,0,UnitMaxHealth);
+        UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed*Time.deltaTime,0,UnitMaxHealth);
     }
-    void TakeDamage(float damageReceive)
+    public float CalculateReducedDamage(float incomingDamage)
     {
-        UnitCurrentHealth -= damageReceive;
+        float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
+        float reducedDamage = incomingDamage * (1f - damageReduction);
+        return Mathf.RoundToInt(reducedDamage);
     }
 }

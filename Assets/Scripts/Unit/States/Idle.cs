@@ -5,15 +5,12 @@ using UnityEngine;
 
 public class Idle : IState
 {
-    LayerMask targetLayers;
+    
     //IF Attacker and No Target => State Moving
     public void EnterState(UnitStateController unitState)
     {
         unitState.state = CurrentState.Idle;
-        targetLayers = LayerMask.GetMask("Unit");
     }
-
-
     public void UpdateState(UnitStateController unitState)
     {
         CheckAvailableTarget(unitState);
@@ -54,7 +51,7 @@ public class Idle : IState
                 if (unitState.Targeting == null)
                 {
                     // Check if there are enemies nearby to switch to the melee attack state
-                    if (CheckEnemyForSupporter(unitState))
+                    if (unitState.CheckEnemyForSupporter())
                     {
                         unitState.SwitchState(unitState.StateMeleeAttack);
                     }
@@ -83,21 +80,7 @@ public class Idle : IState
                 break;
         }
     }
-    bool CheckEnemyForSupporter(UnitStateController unitState)
-    {
-        Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(unitState.transform.position, unitState.UnitStats.UnitCloseRange, targetLayers);
-        // Check if any enemies are found within the specified range
-        foreach (var enemyCollider in enemiesColliders)
-        {
-            Unit enemyUnit = enemyCollider.GetComponent<Unit>();
-            // Check if the collider belongs to an enemy unit
-            if (enemyUnit != null && enemyUnit.IsEnemy)
-            {
-                return true; // Return true if an enemy is found
-            }
-        }
-        return false; // Return false if no enemies are found
-    }
+
 
     #region Nothing here
 
@@ -105,10 +88,4 @@ public class Idle : IState
     public void PhysicsUpdateState(UnitStateController unitState) { }
     public void OnTriggerEnter2DState(UnitStateController unitState) { } 
     #endregion
-
-
-
-
-
-
 }

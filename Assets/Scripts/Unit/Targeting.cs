@@ -243,33 +243,6 @@ public class Targeting : MonoBehaviour
         DistanceBetweenObjectiveAndClosestTarget();
     }
 
-    public bool GoToObjective() //Called by Moving State to get the Transform
-    {
-        switch (unitStats.UnitClass)
-        {
-            case Class.Attacker:
-                // If the primary target is null or the distance to the objective is shorter than the distance to the primary target
-                // Attacker units should go to the objective
-                if (Target == null || DistanceToObj < DistanceToTarget)
-                {
-                    return true;
-                }
-                break;
-            case Class.Supporter:
-                // If the primary target is null
-                // Supporter units should go to the objective
-                if (Target == null)
-                {
-                    return true;
-                }
-                break;
-            default:
-                break;
-        }
-        // If none of the conditions are met, return false
-        return false;
-    }
-
     private void OnDrawGizmos()
     {
         if (!showGizmos) return;
