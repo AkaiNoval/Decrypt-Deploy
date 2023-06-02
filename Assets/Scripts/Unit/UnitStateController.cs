@@ -28,7 +28,7 @@ public class UnitStateController : MonoBehaviour
     UnitStats unitStats;
     // Start is called before the first frame update
     IState currentState;
-    LayerMask targetLayers;
+    public LayerMask targetLayers;
     public CurrentState state;
     public Idle StateIdle = new Idle();
     public Moving StateMoving = new Moving();
@@ -37,7 +37,10 @@ public class UnitStateController : MonoBehaviour
     public Support StateSupport = new Support();
     public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
     public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
-
+    [Header("Options")]
+    public bool CanMultipleDamage;
+    public GameObject bulletSpawnPoint;
+    public GameObject bulletPrefab;
     public Targeting Targeting { get => targeting; set => targeting = value; }
     public UnitStats UnitStats { get => unitStats; set => unitStats = value; }
 
@@ -127,7 +130,13 @@ public class UnitStateController : MonoBehaviour
         // Call the DealDamage method in the MeleeAttack state
         StateMeleeAttack.DealDamage(this);
     }
-    public bool CheckEnemyForSupporter()
+    public void Instantiate(GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
+        bullet.GetComponent<Bullet>().IsEnemyBullet = GetComponent<Unit>().IsEnemy;
+        bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
+    }
+    public bool CheckEnemyInCloseRange()
     {
         Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(transform.position, UnitStats.UnitCloseRange, targetLayers);
         // Check if any enemies are found within the specified range

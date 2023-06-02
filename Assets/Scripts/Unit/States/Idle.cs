@@ -51,7 +51,7 @@ public class Idle : IState
                 if (unitState.Targeting == null)
                 {
                     // Check if there are enemies nearby to switch to the melee attack state
-                    if (unitState.CheckEnemyForSupporter())
+                    if (unitState.CheckEnemyInCloseRange())
                     {
                         unitState.SwitchState(unitState.StateMeleeAttack);
                     }

@@ -31,7 +31,7 @@ public class Moving : IState
     {
         if (previousSpeed != unitState.UnitStats.UnitSpeed)
         {
-            path.speed = unitState.UnitStats.UnitSpeed;
+            path.maxSpeed = unitState.UnitStats.UnitSpeed;
             previousSpeed = unitState.UnitStats.UnitSpeed;
         }
     }

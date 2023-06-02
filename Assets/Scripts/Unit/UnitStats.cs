@@ -125,13 +125,13 @@ public class UnitStats : MonoBehaviour
 
     private void Update()
     {
+        if (UnitCurrentHealth <= 0) return;
         PassiveHealing();
     }
-    void PassiveHealing()
-    {
-        UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed*Time.deltaTime,0,UnitMaxHealth);
-    }
-    public float CalculateReducedDamage(float incomingDamage, bool isCritical)
+    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
+
+    #region MeleeDamage
+    public float CalculateReducedMeleeDamage(float incomingDamage, bool isCritical)
     {
         float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
         float reducedDamage = incomingDamage * (1f - damageReduction);
@@ -140,5 +140,7 @@ public class UnitStats : MonoBehaviour
             Debug.Log("isCritical");
         }
         return Mathf.RoundToInt(reducedDamage);
-    }
+    } 
+    #endregion
+
 }
