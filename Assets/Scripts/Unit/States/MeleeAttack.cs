@@ -8,7 +8,7 @@ public class MeleeAttack : IState
 {
     public void EnterState(UnitStateController unitState)
     {
-        unitState.state = CurrentState.CloseAttack;
+        unitState.currentState = CurrentState.CloseAttack;
     }
     public void UpdateState(UnitStateController unitState)
     {

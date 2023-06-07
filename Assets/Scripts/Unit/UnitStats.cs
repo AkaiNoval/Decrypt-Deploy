@@ -9,7 +9,11 @@ public class UnitStats : MonoBehaviour
     [SerializeField] string unitName;
     [SerializeField] string unitID;
     [SerializeField] Class unitClass;
+    [Header("Abilities")]
+    public SupportAbilityBase SupportType;
+    public PassiveAbilityBase PassiveAbility;
     //Fields for Properties
+    [Header("Stats")]
     [SerializeField] int unitCost;
     [SerializeField] float unitCharisma;
     [SerializeField] float preparationTime;
@@ -137,6 +141,7 @@ public class UnitStats : MonoBehaviour
         float reducedDamage = incomingDamage * (1f - damageReduction);
         if (isCritical)
         {
+            //CriticalDamageTextPopUp
             Debug.Log("isCritical");
         }
         return Mathf.RoundToInt(reducedDamage);

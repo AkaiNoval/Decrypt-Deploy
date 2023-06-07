@@ -10,8 +10,7 @@ public class Moving : IState
     {
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
-        Debug.Log("You are at the Moving State");
-        unitState.state = CurrentState.Moving;
+        unitState.currentState = CurrentState.Moving;
         path.canMove = true;
         previousSpeed = unitState.UnitStats.UnitSpeed;
         path.maxSpeed = unitState.UnitStats.UnitSpeed;
@@ -40,21 +39,21 @@ public class Moving : IState
         #region Supporter
         if (unitState.UnitStats.UnitClass == Class.Supporter)
         {
+            if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange)
+            {
+                // If the target is within the medium range, switch to the Support state
+                Debug.Log("the target is within the medium range, switch to the Support state");
+                unitState.SwitchState(unitState.StateSupport);
+                return;
+            }
             if (unitState.Targeting.Target == null)
             {
+                Debug.Log("the unit class is Supporter and the target is null, switch to the Idle state");
                 // If the unit class is Supporter and the target is null, switch to the Idle state
                 // TODO: Implement random movement in allowed area for supporters
                 unitState.SwitchState(unitState.StateIdle);
                 return;
             }
-
-            if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange)
-            {
-                // If the target is within the medium range, switch to the Support state
-                unitState.SwitchState(unitState.StateSupport);
-                return;
-            }
-
         }
         #endregion
 
@@ -147,11 +146,11 @@ public class Moving : IState
     #region Nothing here
     public void PhysicsUpdateState(UnitStateController unitState)
     {
-        Debug.Log("Physics updating at the Moving State");
+
     }
     public void OnTriggerEnter2DState(UnitStateController unitState)
     {
-        Debug.Log("OnTriggerEnter at the Moving State");
+
     }
     #endregion
 }

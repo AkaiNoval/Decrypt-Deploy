@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06243b0e8a04da7488116939ceed522f, type: 3}
+  m_Name: Nurturing Guardians
+  m_EditorClassIdentifier: 
+  SupportName: Nurturing Guardians
+  SupportDescription: These healers prioritize PassiveHealingSpeed, providing a constant
+    stream of rejuvenation to their teammates, ensuring they recover swiftly.
+  healType: 0
+  HealingAmount: 5
+  PercentageHealingAmount: 0

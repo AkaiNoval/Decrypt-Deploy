@@ -20,7 +20,7 @@ public class RangedAttack : IState
     bool isReloading;
     public void EnterState(UnitStateController unitState)
     {
-        unitState.state = CurrentState.RangedAttack;
+        unitState.currentState = CurrentState.RangedAttack;
         lastShootTime = Time.time;
     }
 
@@ -94,7 +94,7 @@ public class RangedAttack : IState
             Quaternion bulletRotationObj = Quaternion.AngleAxis(angleObj, Vector3.forward);
 
             // Spawn a bullet towards the objective
-            unitState.Instantiate(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
+            unitState.TriggerRangeAttack(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
 
             return;
         }
@@ -130,7 +130,7 @@ public class RangedAttack : IState
         Quaternion bulletRotationTarget = Quaternion.AngleAxis(angleTarget, Vector3.forward);
 
         // Spawn a bullet towards the target
-        unitState.Instantiate(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
+        unitState.TriggerRangeAttack(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
     }
 
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -59,12 +58,10 @@ public class Unit : MonoBehaviour
     {
         if (hasUnitStats && unitStats.UnitCurrentHealth <= 0)
         {
-            Debug.Log("unitStats is not null");
             return true; // The unit is dead
         }
         else
         {
-            Debug.Log("unitStats is null");
             return false; // The unit is not dead
         }
     }

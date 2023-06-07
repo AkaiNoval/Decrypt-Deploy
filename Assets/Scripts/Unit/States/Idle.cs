@@ -9,7 +9,7 @@ public class Idle : IState
     //IF Attacker and No Target => State Moving
     public void EnterState(UnitStateController unitState)
     {
-        unitState.state = CurrentState.Idle;
+        unitState.currentState = CurrentState.Idle;
     }
     public void UpdateState(UnitStateController unitState)
     {
