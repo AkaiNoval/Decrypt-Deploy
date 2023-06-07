@@ -1,48 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
     [SerializeField] bool isEnemy;
     UnitStats unitStats;
+    bool hasUnitStats; // Flag to indicate if the unit has UnitStats component
+
     public bool IsEnemy
     {
-        get { return isEnemy; } // Getter for the isEnemy flag
+        get { return isEnemy; }
         set
         {
             if (isEnemy != value)
             {
-                isEnemy = value; // Update the isEnemy flag with the new value
-                UpdateUnitList(); // Call the method to update the unit list based on the new value
+                isEnemy = value;
+                UpdateUnitList();
             }
         }
     }
     private void Awake()
     {
         unitStats = GetComponent<UnitStats>();
+        hasUnitStats = unitStats != null; // Check if the unit has UnitStats component
     }
-    private void OnValidate() => UpdateUnitList();
-    private void OnEnable() => UpdateUnitList();
-    private void OnDisable() => UpdateUnitList();
+
+    private void Update()
+    {
+        UpdateUnitList();
+    }
+    private void OnDisable()
+    {
+        UnitManager.AllyList.Remove(this); // Remove the unit from AllyList
+        UnitManager.EnemyList.Remove(this); // Remove the unit from EnemyList
+    }
     private void UpdateUnitList()
     {
-        if (UnitManager.AllyList.Contains(this)) UnitManager.AllyList.Remove(this);
-        if (UnitManager.EnemyList.Contains(this)) UnitManager.EnemyList.Remove(this);
-        //if(IsDead) return;
+        UnitManager.AllyList.Remove(this); // Remove the unit from AllyList
+        UnitManager.EnemyList.Remove(this); // Remove the unit from EnemyList
+
+        if (IsDead())
+            return; // Exit the method if the unit is dead
+
+        if (!gameObject.activeInHierarchy)
+            return; // Exit the method if the game object is not active
+
         if (isEnemy)
-        {
-            if (!gameObject.activeInHierarchy) return;
-            UnitManager.EnemyList.Add(this);                       
-        }
+            UnitManager.EnemyList.Add(this); // Add the unit to EnemyList
         else
-        {
-            if (!gameObject.activeInHierarchy) return;
-            UnitManager.AllyList.Add(this);          
-        }
+            UnitManager.AllyList.Add(this); // Add the unit to AllyList
     }
 
     public Vector3 GetPosition() => transform.position;
-    public bool IsDead() => unitStats.UnitCurrentHealth <= 0;
+
+    public bool IsDead()
+    {
+        if (hasUnitStats && unitStats.UnitCurrentHealth <= 0)
+        {
+            return true; // The unit is dead
+        }
+        else
+        {
+            return false; // The unit is not dead
+        }
+    }
 }
+

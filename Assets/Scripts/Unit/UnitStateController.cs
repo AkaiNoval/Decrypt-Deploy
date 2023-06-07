@@ -23,94 +23,78 @@ public enum CurrentState
 }
 public class UnitStateController : MonoBehaviour
 {
+    [SerializeField] float stateSwitchDelay;
     Targeting targeting;
     UnitStats unitStats;
     // Start is called before the first frame update
-    IState currentState;
-    public CurrentState state;
+    IState state;
+    public LayerMask targetLayers;
+    public CurrentState currentState;
     public Idle StateIdle = new Idle();
     public Moving StateMoving = new Moving();
     public MeleeAttack StateMeleeAttack = new MeleeAttack();
+    public RangedAttack StateRangeAttack = new RangedAttack();
+    public Support StateSupport = new Support();
+    public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
+    public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
+    [Header("Options")]
+    public bool CanMultipleDamage;
+    public GameObject bulletSpawnPoint;
+    public GameObject bulletPrefab;
+    public Targeting Targeting { get => targeting; set => targeting = value; }
+    public UnitStats UnitStats { get => unitStats; set => unitStats = value; }
+
+    public bool IsCoroutineRunning { get; set; }
     private void Awake()
     {
-        unitStats = GetComponent<UnitStats>();
-        targeting = GetComponent<Targeting>();
+        UnitStats = GetComponent<UnitStats>();
+        Targeting = GetComponent<Targeting>();
+        targetLayers = LayerMask.GetMask("Unit");
     }               
     void Start()
     {
-        if(currentState == null)
-        {
-            currentState = StateIdle;
-        }
+        IsCoroutineRunning = false;
         //starting state for the state machine
-        currentState = StateIdle;
+        state = StateIdle;
         // "this" is a reference to the context(THIS script)
-        currentState.EnterState(this);
+        state.EnterState(this);
     }
-
-    // Update is called once per frame
     void Update()
-    {   
-        //will call any logic in Update State
-        currentState.UpdateState(this);
+    {
+        if(currentState != CurrentState.UsingPassiveAbility)
+        {
+            unitStats.PassiveAbility.StartTimer(this);
+        }
+        state.UpdateState(this);
         SwitchState();
     }
     void FixedUpdate()
     {
-        currentState.PhysicsUpdateState(this);
+        state.PhysicsUpdateState(this);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        currentState.OnTriggerEnter2DState(this);
+        state.OnTriggerEnter2DState(this);
     }
     public void SwitchState(IState newState)
     {
-        if (currentState != newState)
+        if (state != newState)
         {
-            currentState.ExitState(this);
-            currentState = newState;
-            currentState.EnterState(this);
+            StartCoroutine(DelayedStateSwitch(newState));
         }
     }
-    public void CheckTargetToSwitchState()
+    IEnumerator DelayedStateSwitch(IState newState)
     {
-        bool hasTarget = targeting.Target != null;
-        bool hasObjTarget = targeting.ObjTarget != null;
-        bool isWithinFarRange = false;
-        bool isWithinCloseRange = false;
-        if (hasTarget)
-        {
-            isWithinFarRange = targeting.DistanceToTarget <= unitStats.UnitFarRange || targeting.DistBetweenTargetAndObject <= unitStats.UnitFarRange;
-            isWithinCloseRange = targeting.DistanceToTarget <= unitStats.UnitCloseRange;
-        }
-        else if (hasObjTarget)
-        {
-            isWithinFarRange = targeting.DistanceToObj <= unitStats.UnitFarRange;
-            isWithinCloseRange = targeting.DistanceToObj <= unitStats.UnitCloseRange;
-        }
-        if (isWithinFarRange)
-        {
-            // Switch to range combat
-            // TODO: Add code to switch to range combat
-        }
-        if (isWithinCloseRange)
-        {
-            switch (unitStats.UnitClass)
-            {
-                case Class.Attacker:
-                    SwitchState(StateMeleeAttack);
-                    break;
-                case Class.Supporter:
-                    Debug.Log("SwitchState(StateSupport)");
-                    break;
-                default:
-                    break;
-            }
-        }
+        state.ExitState(this);
+
+        yield return new WaitForSeconds(stateSwitchDelay);
+
+        state = newState;
+        state.EnterState(this); 
     }
     void SwitchState()
     {
-        switch (state)
+        switch (currentState)
         {
             case CurrentState.Idle:
                 SwitchState(StateIdle);
@@ -119,18 +103,65 @@ public class UnitStateController : MonoBehaviour
                 SwitchState(StateMoving);
                 break;
             case CurrentState.RangedAttack:
+                SwitchState(StateRangeAttack);
                 break;
             case CurrentState.CloseAttack:
                 SwitchState(StateMeleeAttack);
                 break;
             case CurrentState.Support:
+                SwitchState(StateSupport);
                 break;
             case CurrentState.UsingActiveAbility:
+                SwitchState(StateActiveAbility);
                 break;
             case CurrentState.UsingPassiveAbility:
+                SwitchState(StatePassiveAbility);
                 break;
             default:
                 break;
         }
+    }
+
+    public void TriggerPassiveAbility()
+    {
+        if (unitStats.PassiveAbility == null) return;
+        unitStats.PassiveAbility.ApplyPassiveAbility(this);
+        IsCoroutineRunning = false;
+        state = StateIdle;
+    }
+
+    //Based on Animation Keyframe 
+    public void TriggerSupport()
+    {
+        if (unitStats.SupportType == null) return;
+        unitStats.SupportType.ApplySupport(this);
+    }
+    //Based on Animation Keyframe 
+    public void TriggerMeleeAttack()
+    {
+        // Call the DealDamage method in the MeleeAttack state
+        StateMeleeAttack.DealDamage(this);
+    }
+    //Based on Animation Keyframe 
+    public void TriggerRangeAttack(GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
+        bullet.GetComponent<Bullet>().IsEnemyBullet = GetComponent<Unit>().IsEnemy;
+        bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
+    }
+    public bool CheckEnemyInCloseRange()
+    {
+        Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(transform.position, UnitStats.UnitCloseRange, targetLayers);
+        // Check if any enemies are found within the specified range
+        foreach (var enemyCollider in enemiesColliders)
+        {
+            Unit enemyUnit = enemyCollider.GetComponent<Unit>();
+            // Check if the collider belongs to an enemy unit
+            if (enemyUnit != null && enemyUnit.IsEnemy)
+            {
+                return true; // Return true if an enemy is found
+            }
+        }
+        return false; // Return false if no enemies are found
     }
 }

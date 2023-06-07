@@ -1,47 +1,91 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Idle : IState
 {
-    Rigidbody2D rigidbody;
-    Targeting targeting;
-
+    
+    //IF Attacker and No Target => State Moving
     public void EnterState(UnitStateController unitState)
     {
-        rigidbody = unitState.GetComponent<Rigidbody2D>();
-        targeting = unitState.GetComponent<Targeting>();
-        unitState.state = CurrentState.Idle;
-        Debug.Log("You are at the Idle State");
-    }
-
-    public void ExitState(UnitStateController unitState)
-    {
-        Debug.Log("You are exiting at the Idle State");
+        unitState.currentState = CurrentState.Idle;
     }
     public void UpdateState(UnitStateController unitState)
     {
-        if (rigidbody.velocity.magnitude <= 0)
-        {
-            Debug.Log("isStanding");
-        }
-        //if (targeting.Target == null) return;
-        if (rigidbody.velocity.magnitude > 0|| targeting.Target != null)
-        {
-            Debug.Log("isMoving");
-            unitState.SwitchState(unitState.StateMoving);
-        }
-        unitState.CheckTargetToSwitchState();
+        CheckAvailableTarget(unitState);
     }
-    public void PhysicsUpdateState(UnitStateController unitState)
+    void CheckAvailableTarget(UnitStateController unitState)
     {
-        Debug.Log("Physics updating at the Idle State");
+        
+        switch (unitState.UnitStats.UnitClass)
+        {
+            case Class.Attacker:
+                // Check if the target is null, if so, switch to moving state
+                if (unitState.Targeting.Target == null)
+                {
+                    unitState.SwitchState(unitState.StateMoving); return;
+                }
+                float distanceToTarget = unitState.Targeting.DistanceToTarget;
+                float closeRange = unitState.UnitStats.UnitCloseRange;
+                float farRange = unitState.UnitStats.UnitFarRange;
+
+                // If the target is beyond the unit's far range or close range, switch to moving state
+                if (distanceToTarget >= farRange)
+                {
+                    unitState.SwitchState(unitState.StateMoving); return;
+                }
+                // If the target is within the far range, switch to the range attack state
+                if (distanceToTarget <= farRange && distanceToTarget >= closeRange)
+                {
+                    unitState.SwitchState(unitState.StateRangeAttack); return;
+                }
+                // If the target is within the close range, switch to the melee attack state
+                if (distanceToTarget <= closeRange)
+                {
+                    unitState.SwitchState(unitState.StateMeleeAttack); return;
+                }
+                break;
+            case Class.Supporter:
+                // If no target is available
+                if (unitState.Targeting == null)
+                {
+                    // Check if there are enemies nearby to switch to the melee attack state
+                    if (unitState.CheckEnemyInCloseRange())
+                    {
+                        unitState.SwitchState(unitState.StateMeleeAttack);
+                    }
+                    else
+                    {
+                        // If no enemies are nearby, switch to idle state
+                        unitState.SwitchState(unitState.StateIdle);
+                    }
+                }
+                else
+                {
+                    // If the target is beyond the close range, switch to moving state
+                    if (unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
+                    {
+                        unitState.SwitchState(unitState.StateMoving);
+                    }
+                    else
+                    {
+                        // If the target is within the close range, switch to support state
+                        unitState.SwitchState(unitState.StateSupport);
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
     }
-    public void OnTriggerEnter2DState(UnitStateController unitState)
-    {
-        Debug.Log("OnTriggerEnter at the Idle State");
-    }
 
 
+    #region Nothing here
 
+    public void ExitState(UnitStateController unitState) { }
+    public void PhysicsUpdateState(UnitStateController unitState) { }
+    public void OnTriggerEnter2DState(UnitStateController unitState) { } 
+    #endregion
 }

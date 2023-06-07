@@ -6,7 +6,7 @@ public class UsingActiveAbility : IState
 {
     public void EnterState(UnitStateController unitState)
     {
-       
+        unitState.currentState = CurrentState.UsingActiveAbility;
     }
 
     public void ExitState(UnitStateController unitState)

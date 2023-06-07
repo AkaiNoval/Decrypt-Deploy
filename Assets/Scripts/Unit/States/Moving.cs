@@ -1,26 +1,19 @@
 using Pathfinding;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Moving : IState
 {
-    Targeting targeting;
-    UnitStats unitStats;
     AIPath path;
     AIDestinationSetter destinationSetter;
+    float previousSpeed;
     public void EnterState(UnitStateController unitState)
     {
-        unitStats = unitState.GetComponent<UnitStats>();
-        targeting = unitState.GetComponent<Targeting>();
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
-        unitState.state = CurrentState.Moving;
-        Debug.Log("You are at the Moving State");
+        unitState.currentState = CurrentState.Moving;
         path.canMove = true;
-        path.maxSpeed = unitStats.UnitSpeed;
-
+        previousSpeed = unitState.UnitStats.UnitSpeed;
+        path.maxSpeed = unitState.UnitStats.UnitSpeed;
     }
     public void ExitState(UnitStateController unitState)
     {
@@ -29,35 +22,135 @@ public class Moving : IState
     }
     public void UpdateState(UnitStateController unitState)
     {
-        Debug.Log("You are updating at the Moving State");
-        SetAndMoveToTarget();
-        unitState.CheckTargetToSwitchState();
+        SpeedUpdate(unitState);
+        SwitchState(unitState);
+        SetAndMoveToTarget(unitState);
     }
-    public void PhysicsUpdateState(UnitStateController unitState)
+    void SpeedUpdate(UnitStateController unitState)
     {
-        Debug.Log("Physics updating at the Moving State");
+        if (previousSpeed != unitState.UnitStats.UnitSpeed)
+        {
+            path.maxSpeed = unitState.UnitStats.UnitSpeed;
+            previousSpeed = unitState.UnitStats.UnitSpeed;
+        }
     }
-    public void OnTriggerEnter2DState(UnitStateController unitState)
+    void SwitchState(UnitStateController unitState)
     {
-        Debug.Log("OnTriggerEnter at the Moving State");
+        #region Supporter
+        if (unitState.UnitStats.UnitClass == Class.Supporter)
+        {
+            if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange)
+            {
+                // If the target is within the medium range, switch to the Support state
+                Debug.Log("the target is within the medium range, switch to the Support state");
+                unitState.SwitchState(unitState.StateSupport);
+                return;
+            }
+            if (unitState.Targeting.Target == null)
+            {
+                Debug.Log("the unit class is Supporter and the target is null, switch to the Idle state");
+                // If the unit class is Supporter and the target is null, switch to the Idle state
+                // TODO: Implement random movement in allowed area for supporters
+                unitState.SwitchState(unitState.StateIdle);
+                return;
+            }
+        }
+        #endregion
+
+        #region Attacker
+        else if (unitState.UnitStats.UnitClass == Class.Attacker)
+        {
+            #region Objective
+            if (unitState.Targeting.Objective != null && unitState.Targeting.DistanceToObj <= unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToObj > unitState.UnitStats.UnitCloseRange)
+            {
+                // If the objective is within the long range, switch to the RangeAttack state
+                unitState.SwitchState(unitState.StateRangeAttack);
+                return;
+            }
+            else if (unitState.Targeting.DistanceToObj <= unitState.UnitStats.UnitCloseRange)
+            {
+                // If the objective is within the close range, switch to the MeleeAttack state
+                unitState.SwitchState(unitState.StateMeleeAttack);
+                return;
+            }
+            #endregion
+
+            #region Target
+            if (unitState.Targeting.Target == null)
+            {
+                return;
+            }
+            if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
+            {
+                // If the target is within the long range, switch to the RangeAttack state
+                unitState.SwitchState(unitState.StateRangeAttack);
+                return;
+            }
+            else if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange)
+            {
+                // If the target is within the close range, switch to the MeleeAttack state
+                unitState.SwitchState(unitState.StateMeleeAttack);
+                return;
+            } 
+            #endregion
+        } 
+        #endregion
     }
-    void SetAndMoveToTarget()
+    void SetAndMoveToTarget(UnitStateController unitState)
     {
         Transform targetTransform = null;
         // Check if the objective should be the target
-        if (targeting.GoToObjective())
+        if (GoToObjective(unitState))
         {
             // If the objective target is not null, set it as the target transform
-            targetTransform = targeting.ObjTarget != null ? targeting.ObjTarget.transform : null;
+            targetTransform = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.transform : null;
         }
         else
         {
-            // If the objective target is not selected, set the primary target as the target transform
-            targetTransform = targeting.Target != null ? targeting.Target.transform : null;
+            if (unitState.UnitStats.UnitClass == Class.Attacker)
+            {
+                // If the unit class is Attacker, set the primary target as the target transform
+                targetTransform = unitState.Targeting.Target != null ? unitState.Targeting.Target.transform : null;
+            }
+            else if (unitState.UnitStats.UnitClass == Class.Supporter)
+            {
+                if (unitState.Targeting.Target == null)
+                {
+                    // If the unit class is Supporter and the target is null, switch to the Idle state
+                    unitState.SwitchState(unitState.StateIdle);
+                    return;
+                }
+                // If the target is not null, set it as the target transform
+                targetTransform = unitState.Targeting.Target != null ? unitState.Targeting.Target.transform : null;
+            }
         }
         // Set the target transform in the destination setter
         destinationSetter.target = targetTransform;
     }
+    bool GoToObjective(UnitStateController unitState)
+    {
+        //Only Attacker can go to the ojbective
+        return unitState.UnitStats.UnitClass switch
+        {
+            // If the unit class is Attacker and either the primary target is null or the distance to the objective is shorter than the distance to the primary target, return true.
+            Class.Attacker when (unitState.Targeting.Target == null || unitState.Targeting.DistanceToObj < unitState.Targeting.DistanceToTarget) => true,
 
+            // If the unit class is Supporter and the primary target is null, return false.
+            Class.Supporter when (unitState.Targeting.Target == null) => false,
 
+            // For any other unit class, return false.
+            _ => false
+        };
+    }
+
+    #region Nothing here
+    public void PhysicsUpdateState(UnitStateController unitState)
+    {
+
+    }
+    public void OnTriggerEnter2DState(UnitStateController unitState)
+    {
+
+    }
+    #endregion
 }

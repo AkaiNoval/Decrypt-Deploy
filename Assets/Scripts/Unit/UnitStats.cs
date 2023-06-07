@@ -9,7 +9,11 @@ public class UnitStats : MonoBehaviour
     [SerializeField] string unitName;
     [SerializeField] string unitID;
     [SerializeField] Class unitClass;
+    [Header("Abilities")]
+    public SupportAbilityBase SupportType;
+    public PassiveAbilityBase PassiveAbility;
     //Fields for Properties
+    [Header("Stats")]
     [SerializeField] int unitCost;
     [SerializeField] float unitCharisma;
     [SerializeField] float preparationTime;
@@ -123,12 +127,25 @@ public class UnitStats : MonoBehaviour
         UnitExplosionResistance = soStats.ExplosionResistance;
     }
 
-    void PassiveHealing()
+    private void Update()
     {
-        UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth+UnitHealingSpeed,0,UnitMaxHealth);
+        if (UnitCurrentHealth <= 0) return;
+        PassiveHealing();
     }
-    void TakeDamage(float damageReceive)
+    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
+
+    #region MeleeDamage
+    public float CalculateReducedMeleeDamage(float incomingDamage, bool isCritical)
     {
-        UnitCurrentHealth -= damageReceive;
-    }
+        float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
+        float reducedDamage = incomingDamage * (1f - damageReduction);
+        if (isCritical)
+        {
+            //CriticalDamageTextPopUp
+            Debug.Log("isCritical");
+        }
+        return Mathf.RoundToInt(reducedDamage);
+    } 
+    #endregion
+
 }
