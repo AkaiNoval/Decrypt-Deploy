@@ -61,12 +61,13 @@ public class UnitStateController : MonoBehaviour
     }
     void Update()
     {
-        if(currentState != CurrentState.UsingPassiveAbility)
+        SwitchState();
+        if (currentState != CurrentState.UsingPassiveAbility)
         {
             unitStats.PassiveAbility.StartTimer(this);
         }
         state.UpdateState(this);
-        SwitchState();
+
     }
     void FixedUpdate()
     {
@@ -78,16 +79,28 @@ public class UnitStateController : MonoBehaviour
     }
     public void SwitchState(IState newState)
     {
-        if (state != newState)
+        //Avoid going to another state when chaning to  USINGPASSIVE or USINGACTIVE STATE.
+        if (currentState == CurrentState.UsingPassiveAbility)
         {
-            StartCoroutine(DelayedStateSwitch(newState));
+            newState = StatePassiveAbility;
         }
+        if(currentState == CurrentState.UsingActiveAbility)
+        {
+            newState = StateActiveAbility;
+        }
+        if (state == newState) return; 
+        StartCoroutine(DelayedStateSwitch(newState));
     }
     IEnumerator DelayedStateSwitch(IState newState)
     {
+        float localStateSwitchDelay = stateSwitchDelay;
+        if(newState == StatePassiveAbility || newState == StateActiveAbility)
+        {
+            localStateSwitchDelay = 0f;
+        }
         state.ExitState(this);
 
-        yield return new WaitForSeconds(stateSwitchDelay);
+        yield return new WaitForSeconds(localStateSwitchDelay);
 
         state = newState;
         state.EnterState(this); 
@@ -122,12 +135,31 @@ public class UnitStateController : MonoBehaviour
         }
     }
 
+    #region Button
+    public void ChangeToActiveAbilityState()
+    {
+        currentState = CurrentState.UsingActiveAbility;
+    }
+
+    public void ActiveActiveAbility()
+    {
+        unitStats.ActiveAbility.ApplyActiveAbility(this);
+    }
+    #endregion
+
+    #region AnimationEvent keyframe
+    public void TriggerActiveAbility()
+    {
+        Debug.Log("Active Ability");
+    }
+
+    //Based on Animation Keyframe
     public void TriggerPassiveAbility()
     {
         if (unitStats.PassiveAbility == null) return;
         unitStats.PassiveAbility.ApplyPassiveAbility(this);
         IsCoroutineRunning = false;
-        state = StateIdle;
+        currentState = CurrentState.Idle;
     }
 
     //Based on Animation Keyframe 
@@ -148,7 +180,9 @@ public class UnitStateController : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
         bullet.GetComponent<Bullet>().IsEnemyBullet = GetComponent<Unit>().IsEnemy;
         bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
-    }
+    } 
+    #endregion
+
     public bool CheckEnemyInCloseRange()
     {
         Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(transform.position, UnitStats.UnitCloseRange, targetLayers);
@@ -164,4 +198,5 @@ public class UnitStateController : MonoBehaviour
         }
         return false; // Return false if no enemies are found
     }
+
 }
