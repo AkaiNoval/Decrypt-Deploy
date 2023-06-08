@@ -12,7 +12,11 @@ public class UnitStats : MonoBehaviour
     [Header("Abilities")]
     public SupportAbilityBase SupportType;
     public PassiveAbilityBase PassiveAbility;
+    public ActiveAbilityBase ActiveAbility;
     //Fields for Properties
+    [Header("Weapon")]
+    [SerializeField] SOWeapon weapon;
+    SOWeapon previousWeapon;
     [Header("Stats")]
     [SerializeField] int unitCost;
     [SerializeField] float unitCharisma;
@@ -88,10 +92,21 @@ public class UnitStats : MonoBehaviour
     {
         if (soStats == null)
         {
-          Debug.LogWarning("Unit Stats SO is empty, please check again"); return;
+            Debug.LogWarning("Unit Stats SO is empty, please check again"); return;
         }
+        GetBaseStats();
+        if (weapon != null)
+        {
+            previousWeapon = weapon;
+            // Increase the stats based on the referenced weapon
+            IncreaseStatsFromWeapon(weapon);
+        }
+    }
+
+    private void GetBaseStats()
+    {
         unitName = soStats.name;
-        unitID= soStats.ID;
+        unitID = soStats.ID;
         //Properties
         UnitClass = soStats.Class;
         UnitCost = soStats.Cost;
@@ -99,12 +114,12 @@ public class UnitStats : MonoBehaviour
         UnitMaxHealth = soStats.MaxHealth;
         UnitCurrentHealth = UnitMaxHealth;
         UnitHealingSpeed = soStats.HealingSpeed;
-        UnitMorale= soStats.Morale;
-        UnitCharisma= soStats.Charisma;
+        UnitMorale = soStats.Morale;
+        UnitCharisma = soStats.Charisma;
         UnitSpeed = soStats.Speed;
         UnitAgility = soStats.Agility;
         UnitDodgeChance = soStats.DodgeChance;
-        UnitCloseRange= soStats.CloseRange;
+        UnitCloseRange = soStats.CloseRange;
         UnitFarRange = soStats.FarRange;
         UnitAccuracy = soStats.Accuracy;
         UnitCriticalChance = soStats.CriticalChance;
@@ -131,8 +146,38 @@ public class UnitStats : MonoBehaviour
     {
         if (UnitCurrentHealth <= 0) return;
         PassiveHealing();
+        SwitchWeapon(weapon);
     }
     void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
+    void IncreaseStatsFromWeapon(SOWeapon weapon)
+    {
+        UnitMeleeDamage += weapon.unitMeleeDamage;
+        UnitRangeDamage += weapon.unitRangeDamage;
+        UnitPoisonDamage += weapon.unitPoisonDamage;
+        UnitFireDamage += weapon.unitFireDamage;
+        UnitCryoDamage += weapon.unitCryoDamage;
+        UnitElectrifiedDamage += weapon.unitElectrifiedDamage;
+        UnitExplosionDamage += weapon.unitExplosionDamage;
+        UnitCriticalChance += weapon.unitCriticalChance;
+        UnitCriticalDamage += weapon.unitCriticalDamage;
+        UnitDodgeChance += weapon.DodgeChance;
+        UnitSpeed += weapon.Speed;
+        UnitAccuracy += weapon.Accuracy;
+    }
+    void SwitchWeapon(SOWeapon weapon)
+    {
+        // Check if the new weapon is the same as the previous weapon
+        if (previousWeapon == weapon)
+        {
+            // If it is the same, no need to switch, so return
+            return;
+        }
+        // Store the new weapon as the previous weapon
+        previousWeapon = weapon;
+        // Increase the unit's stats based on the new weapon
+        GetBaseStats();
+        IncreaseStatsFromWeapon(weapon);
+    }
 
     #region MeleeDamage
     public float CalculateReducedMeleeDamage(float incomingDamage, bool isCritical)
@@ -147,5 +192,6 @@ public class UnitStats : MonoBehaviour
         return Mathf.RoundToInt(reducedDamage);
     } 
     #endregion
+
 
 }
