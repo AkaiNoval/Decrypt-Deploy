@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType
+{
+    Melee,
+    Range
+}
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
 {
     public Sprite WeaponSprite;
     public RuntimeAnimatorController runtimeAnimController;
+    public WeaponType WeaponType;
     [Header("Critical")]
     public float unitCriticalChance;
     public float unitCriticalDamage;

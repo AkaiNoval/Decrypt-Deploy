@@ -19,21 +19,21 @@ MonoBehaviour:
     and cunning scavenger. Unleash chaos with controlled style, a force of justice
     with a touch of mischief.
   Class: 0
-  PreparationTime: 10
+  PreparationTime: 20
   Cost: 10
   MaxHealth: 100
   HealingSpeed: 1
-  Morale: 100
-  Charisma: 25
+  Morale: 80
+  Charisma: 60
   Speed: 1
   Agility: 50
-  DodgeChance: 25
-  CloseRange: 1
-  FarRange: 0
+  DodgeChance: 20
+  CloseRange: 3
+  FarRange: 10
   Accuracy: 75
   CriticalChance: 10
-  CriticalDamage: 10
-  MeleeDamage: 3
+  CriticalDamage: 50
+  MeleeDamage: 5
   RangeDamage: 0
   PoisonDamage: 0
   FireDamage: 0

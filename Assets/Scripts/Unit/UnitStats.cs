@@ -15,7 +15,7 @@ public class UnitStats : MonoBehaviour
     public ActiveAbilityBase ActiveAbility;
     //Fields for Properties
     [Header("Weapon")]
-    [SerializeField] SOWeapon weapon;
+    public SOWeapon Weapon;
     SOWeapon previousWeapon;
     [Header("Stats")]
     [SerializeField] int unitCost;
@@ -95,11 +95,11 @@ public class UnitStats : MonoBehaviour
             Debug.LogWarning("Unit Stats SO is empty, please check again"); return;
         }
         GetBaseStats();
-        if (weapon != null)
+        if (Weapon != null)
         {
-            previousWeapon = weapon;
+            previousWeapon = Weapon;
             // Increase the stats based on the referenced weapon
-            IncreaseStatsFromWeapon(weapon);
+            IncreaseStatsFromWeapon(Weapon);
         }
     }
 
@@ -146,7 +146,7 @@ public class UnitStats : MonoBehaviour
     {
         if (UnitCurrentHealth <= 0) return;
         PassiveHealing();
-        SwitchWeapon(weapon);
+        SwitchWeapon(Weapon);
     }
     void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
     void IncreaseStatsFromWeapon(SOWeapon weapon)
