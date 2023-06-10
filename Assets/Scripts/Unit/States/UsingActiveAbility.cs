@@ -11,9 +11,8 @@ public class UsingActiveAbility : IState
 
     public void UpdateState(UnitStateController unitState)
     {
-        //play the animation that call animation event 
+        
     }
-
     #region Nothing here
     public void ExitState(UnitStateController unitState) { }
     public void OnTriggerEnter2DState(UnitStateController unitState) { }

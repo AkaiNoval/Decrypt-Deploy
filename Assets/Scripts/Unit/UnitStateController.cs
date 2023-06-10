@@ -23,10 +23,8 @@ public enum CurrentState
 }
 public class UnitStateController : MonoBehaviour
 {
+    [Range(0f, 1f)]
     [SerializeField] float stateSwitchDelay;
-    Targeting targeting;
-    UnitStats unitStats;
-    // Start is called before the first frame update
     IState state;
     public LayerMask targetLayers;
     public CurrentState currentState;
@@ -41,10 +39,12 @@ public class UnitStateController : MonoBehaviour
     public bool CanMultipleDamage;
     public GameObject bulletSpawnPoint;
     public GameObject bulletPrefab;
-    public Targeting Targeting { get => targeting; set => targeting = value; }
-    public UnitStats UnitStats { get => unitStats; set => unitStats = value; }
+    public Targeting Targeting { get ; set; }
+    public UnitStats UnitStats { get; set; }
 
     public bool IsCoroutineRunning { get; set; }
+    public float StateSwitchDelay { get => stateSwitchDelay; set => stateSwitchDelay = Mathf.Clamp(value,0,1); }
+
     private void Awake()
     {
         UnitStats = GetComponent<UnitStats>();
@@ -64,7 +64,7 @@ public class UnitStateController : MonoBehaviour
         SwitchState();
         if (currentState != CurrentState.UsingPassiveAbility)
         {
-            unitStats.PassiveAbility.StartTimer(this);
+            UnitStats.PassiveAbility.StartTimer(this);
         }
         state.UpdateState(this);
 
@@ -93,7 +93,7 @@ public class UnitStateController : MonoBehaviour
     }
     IEnumerator DelayedStateSwitch(IState newState)
     {
-        float localStateSwitchDelay = stateSwitchDelay;
+        float localStateSwitchDelay = StateSwitchDelay;
         if(newState == StatePassiveAbility || newState == StateActiveAbility)
         {
             localStateSwitchDelay = 0f;
@@ -143,7 +143,7 @@ public class UnitStateController : MonoBehaviour
 
     public void ActiveActiveAbility()
     {
-        unitStats.ActiveAbility.ApplyActiveAbility(this);
+        UnitStats.ActiveAbility.ApplyActiveAbility(this);
     }
     #endregion
 
@@ -156,8 +156,8 @@ public class UnitStateController : MonoBehaviour
     //Based on Animation Keyframe
     public void TriggerPassiveAbility()
     {
-        if (unitStats.PassiveAbility == null) return;
-        unitStats.PassiveAbility.ApplyPassiveAbility(this);
+        if (UnitStats.PassiveAbility == null) return;
+        UnitStats.PassiveAbility.ApplyPassiveAbility(this);
         IsCoroutineRunning = false;
         currentState = CurrentState.Idle;
     }
@@ -165,8 +165,8 @@ public class UnitStateController : MonoBehaviour
     //Based on Animation Keyframe 
     public void TriggerSupport()
     {
-        if (unitStats.SupportType == null) return;
-        unitStats.SupportType.ApplySupport(this);
+        if (UnitStats.SupportType == null) return;
+        UnitStats.SupportType.ApplySupport(this);
     }
     //Based on Animation Keyframe 
     public void TriggerMeleeAttack()
