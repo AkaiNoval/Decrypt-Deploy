@@ -6,6 +6,7 @@ public class Moving : IState
     AIPath path;
     AIDestinationSetter destinationSetter;
     float previousSpeed;
+    GameObject previousTransform;
     public void EnterState(UnitStateController unitState)
     {
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
@@ -19,6 +20,7 @@ public class Moving : IState
     {
         Debug.Log("You are exiting at the Moving State");
         path.canMove = false;
+        Object.Destroy(previousTransform);
     }
     public void UpdateState(UnitStateController unitState)
     {
@@ -102,8 +104,19 @@ public class Moving : IState
         // Check if the objective should be the target
         if (GoToObjective(unitState))
         {
-            // If the objective target is not null, set it as the target transform
-            targetTransform = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.transform : null;
+            if (previousTransform != null) return;
+            // Get the Collider2D component from the objective target
+            Collider2D targetCollider = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.GetComponent<Collider2D>() : null;
+            if (targetCollider != null)
+            {
+                // Generate a random position within the target collider bounds
+                Vector2 randomPosition = GetRandomPositionInCollider(targetCollider);
+
+                // Create a new GameObject and set its position to the random position
+                previousTransform = new GameObject();
+                targetTransform = previousTransform.transform;
+                targetTransform.position = randomPosition;
+            }
         }
         else
         {
@@ -126,6 +139,19 @@ public class Moving : IState
         }
         // Set the target transform in the destination setter
         destinationSetter.target = targetTransform;
+    }
+    Vector2 GetRandomPositionInCollider(Collider2D collider)
+    {
+        Vector2 randomPosition = Vector2.zero;
+
+        if (collider != null)
+        {
+            Bounds bounds = collider.bounds;
+            randomPosition.x = Random.Range(bounds.min.x, bounds.max.x);
+            randomPosition.y = Random.Range(bounds.min.y, bounds.max.y);
+        }
+        
+        return randomPosition;
     }
     bool GoToObjective(UnitStateController unitState)
     {

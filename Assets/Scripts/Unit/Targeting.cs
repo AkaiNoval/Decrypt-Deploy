@@ -54,6 +54,7 @@ public class Targeting : MonoBehaviour
             GetObjective(); // Update the objective
         }
         CalcDist(); // Calculate distances
+        RotateUnit();
     }
 
 
@@ -213,6 +214,37 @@ public class Targeting : MonoBehaviour
         }
 
         return closestWithHighestHealth;
+    }
+
+    private void RotateUnit()
+    {
+        if (_unit.IsEnemy)
+        {
+            if (Target != null && Target.transform.position.x > transform.position.x)
+            {
+                // Target is on the right, rotate to face right
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else
+            {
+                // Target is on the left or no target, rotate to face left
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
+        else
+        {
+            if (Target != null && Target.transform.position.x < transform.position.x)
+            {
+                // Target is on the left, rotate to face left
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                // Target is on the right or no target, rotate to face right
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+
     }
     public float DistanceBetweenUnitAndTarget()
     {
