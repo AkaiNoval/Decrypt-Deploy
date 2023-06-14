@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5988215814353024996}
   - component: {fileID: 6800605541706213167}
   - component: {fileID: 4584886157373437555}
+  - component: {fileID: 3867669892499092035}
   m_Layer: 0
   m_Name: FragGrenade
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5038214668817029584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.3112526, y: 0.6528471, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -123,3 +124,19 @@ MonoBehaviour:
   normalStrength: 5
   normalSmoothing: 1
   computingNormal: 0
+--- !u!114 &3867669892499092035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5038214668817029584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f9a13be6d77144483ae6c5803f3ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
+  Radius: 3
+  DamageAmount: 100
+  drawGizmos: 1

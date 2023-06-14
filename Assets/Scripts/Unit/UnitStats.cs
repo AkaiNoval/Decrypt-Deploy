@@ -190,8 +190,12 @@ public class UnitStats : MonoBehaviour
             Debug.Log("isCritical");
         }
         return Mathf.RoundToInt(reducedDamage);
-    } 
+    }
     #endregion
 
-
+    public void TakeExplosionDamage(float damage)
+    {
+        float effectiveDamage = damage * (1f - unitExplosionResistance / 100f);
+        UnitCurrentHealth -= effectiveDamage;
+    }
 }

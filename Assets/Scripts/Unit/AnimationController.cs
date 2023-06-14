@@ -61,10 +61,10 @@ public class AnimationController : MonoBehaviour
                 // Handle Support case
                 break;
             case CurrentState.UsingActiveAbility:
-                // Handle UsingActiveAbility case
+                animator.SetTrigger("ActiveAbility");
                 break;
             case CurrentState.UsingPassiveAbility:
-                // Handle UsingPassiveAbility case
+                animator.SetTrigger("PassiveAbility");
                 break;
             default:
                 // Handle default case
@@ -72,6 +72,25 @@ public class AnimationController : MonoBehaviour
         }
         
     }
+
+    public void TriggerActiveAbility()
+    {
+        unitStats.ActiveAbility.ApplyActiveAbility(stateController);
+    }
+    public void TriggerPassiveAbility()
+    {
+        unitStats.PassiveAbility.ApplyPassiveAbility(stateController);
+    }
+    public void ChangeToActiveAbilityState()
+    {
+        stateController.currentState = CurrentState.UsingActiveAbility;
+    }
+    public void ChangeToIdleState()
+    {
+        stateController.currentState = CurrentState.Idle;
+    }
+
+
 
 }
 

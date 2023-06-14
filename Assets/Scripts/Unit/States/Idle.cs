@@ -21,31 +21,53 @@ public class Idle : IState
         switch (unitState.UnitStats.UnitClass)
         {
             case Class.Attacker:
-                // Check if the target is null, if so, switch to moving state
-                if (unitState.Targeting.Target == null)
-                {
-                    unitState.SwitchState(unitState.StateMoving); return;
-                }
+                // Retrieve distance variables and target from unitState
                 float distanceToTarget = unitState.Targeting.DistanceToTarget;
+                float distanceToObj = unitState.Targeting.DistanceToObj;
                 float closeRange = unitState.UnitStats.UnitCloseRange;
                 float farRange = unitState.UnitStats.UnitFarRange;
+                Unit Target = unitState.Targeting.Target;
 
-                // If the target is beyond the unit's far range or close range, switch to moving state
-                if (distanceToTarget >= farRange)
+                // Check the conditions and switch states accordingly
+                if (Target == null)
                 {
-                    unitState.SwitchState(unitState.StateMoving); return;
+                    if (distanceToObj > closeRange && distanceToObj > farRange)
+                    {
+                        // If there is no target and the distance to object is beyond both ranges, switch to moving state
+                        unitState.SwitchState(unitState.StateMoving);
+                    }
+                    else if (distanceToObj > closeRange && distanceToObj <= farRange)
+                    {
+                        // If there is no target and the distance to object is within the far range, switch to range attack state
+                        unitState.SwitchState(unitState.StateRangeAttack);
+                    }
+                    else if (distanceToObj <= closeRange)
+                    {
+                        // If there is no target and the distance to object is within the close range, switch to melee attack state
+                        unitState.SwitchState(unitState.StateMeleeAttack);
+                    }
+                    // No target, return
+                    return;
                 }
-                // If the target is within the far range, switch to the range attack state
+                // Check the conditions based on the distance to the target and switch states accordingly
                 if (distanceToTarget <= farRange && distanceToTarget >= closeRange)
                 {
-                    unitState.SwitchState(unitState.StateRangeAttack); return;
+                    // If the target is within the far range, switch to range attack state
+                    unitState.SwitchState(unitState.StateRangeAttack);
                 }
-                // If the target is within the close range, switch to the melee attack state
-                if (distanceToTarget <= closeRange)
+                else if (distanceToTarget <= closeRange)
                 {
-                    unitState.SwitchState(unitState.StateMeleeAttack); return;
+                    // If the target is within the close range, switch to melee attack state
+                    unitState.SwitchState(unitState.StateMeleeAttack);
                 }
+                else if (distanceToTarget >= farRange)
+                {
+                    // If the target is beyond the unit's far range, switch to moving state
+                    unitState.SwitchState(unitState.StateMoving);
+                }
+                // Check if the target is null, if so, switch to moving state
                 break;
+
             case Class.Supporter:
                 // If no target is available
                 if (unitState.Targeting == null)

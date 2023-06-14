@@ -40,12 +40,12 @@ public class SOUnitStats : ScriptableObject
     public float ElectrifiedDamage;
     public float ExplosionDamage;
     [Header("DamageResistance")]
-    public float BulletResistance;
-    public float MeleeResistance;
-    public float PoisonResistance;
-    public float FireResistance;
-    public float CryoResistance;
-    public float ElectrifiedResistance;
-    public float ExplosionResistance;
+    [Range(0, 100)] public float BulletResistance;
+    [Range(0, 100)] public float MeleeResistance;
+    [Range(0, 100)] public float PoisonResistance;
+    [Range(0, 100)] public float FireResistance;
+    [Range(0, 100)] public float CryoResistance;
+    [Range(0, 100)] public float ElectrifiedResistance;
+    [Range(0, 100)] public float ExplosionResistance;
 
 }

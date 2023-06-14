@@ -79,32 +79,38 @@ public class UnitStateController : MonoBehaviour
     }
     public void SwitchState(IState newState)
     {
-        //Avoid going to another state when chaning to  USINGPASSIVE or USINGACTIVE STATE.
-        if (currentState == CurrentState.UsingPassiveAbility)
-        {
-            newState = StatePassiveAbility;
-        }
-        if(currentState == CurrentState.UsingActiveAbility)
-        {
-            newState = StateActiveAbility;
-        }
-        if (state == newState) return; 
+        if (state == newState) return;
         StartCoroutine(DelayedStateSwitch(newState));
     }
     IEnumerator DelayedStateSwitch(IState newState)
     {
+        // Determine the state switch delay based on the new state
         float localStateSwitchDelay = StateSwitchDelay;
-        if(newState == StatePassiveAbility || newState == StateActiveAbility)
+        if (newState == StatePassiveAbility || newState == StateActiveAbility)
         {
             localStateSwitchDelay = 0f;
         }
+        // Exit the current state
         state.ExitState(this);
-
+        // Wait for the state switch delay
         yield return new WaitForSeconds(localStateSwitchDelay);
-
-        state = newState;
-        state.EnterState(this); 
+        // Update the state based on the current state
+        if (currentState == CurrentState.UsingPassiveAbility)
+        {
+            state = StatePassiveAbility;
+        }
+        else if (currentState == CurrentState.UsingActiveAbility)
+        {
+            state = StateActiveAbility;
+        }
+        else
+        {
+            state = newState;
+        }
+        // Enter the new state
+        state.EnterState(this);
     }
+
     void SwitchState()
     {
         switch (currentState)
@@ -135,23 +141,8 @@ public class UnitStateController : MonoBehaviour
         }
     }
 
-    #region Button
-    public void ChangeToActiveAbilityState()
-    {
-        currentState = CurrentState.UsingActiveAbility;
-    }
-
-    public void ActiveActiveAbility()
-    {
-        UnitStats.ActiveAbility.ApplyActiveAbility(this);
-    }
-    #endregion
-
     #region AnimationEvent keyframe
-    public void TriggerActiveAbility()
-    {
-        Debug.Log("Active Ability");
-    }
+
 
     //Based on Animation Keyframe
     public void TriggerPassiveAbility()
