@@ -10,19 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdf71ef6df971ca4da3e9da2ff3f6df8, type: 3}
-  m_Name: Pistol
+  m_Name: Standard Sidearm
   m_EditorClassIdentifier: 
-  WeaponSprite: {fileID: 0}
-  runtimeAnimController: {fileID: 0}
-  unitCriticalChance: 5
-  unitCriticalDamage: 10
+  WeaponSprite: {fileID: 4090386550594248903, guid: abeab81a5673ced428754a67d26bdd17, type: 3}
+  runtimeAnimController: {fileID: 9100000, guid: e7f83a49f8c97d040b1ad50f85799a79, type: 2}
+  WeaponType: 1
+  CloseRange: 0
+  FarRange: 5
+  unitCriticalChance: 20
+  unitCriticalDamage: 20
   DodgeChance: 0
-  Speed: 2
-  Accuracy: 0
-  unitMeleeDamage: 10
-  unitRangeDamage: 0
+  Speed: 0
+  Accuracy: 33
+  unitMeleeDamage: 0
+  unitRangeDamage: 10
   unitPoisonDamage: 0
   unitFireDamage: 0
   unitCryoDamage: 0
   unitElectrifiedDamage: 0
   unitExplosionDamage: 0
+  CanMultipleDamage: 0
+  Magazine: 0
+  SpreadMode: 0
+  SpreadAmount: 0
+  SpreadAngle: 0

@@ -46,6 +46,7 @@ public class Targeting : MonoBehaviour
     }
     private void Update()
     {
+        if (unitStats.IsDead()) return;
         // Update the current target by finding the closest unit within range
         Target = GetClosestUnit(_unit.GetPosition(), range); // Store the previous value of IsEnemy
         // Check if the value of IsEnemy has changed

@@ -15,15 +15,18 @@ MonoBehaviour:
   WeaponSprite: {fileID: 0}
   runtimeAnimController: {fileID: 9100000, guid: c32ab1799c6718d47b28d2423e6c7fc3, type: 2}
   WeaponType: 0
-  unitCriticalChance: 5
-  unitCriticalDamage: 5
+  CloseRange: 3
+  FarRange: 0
+  unitCriticalChance: 0
+  unitCriticalDamage: 0
   DodgeChance: 50
   Speed: 0.5
   Accuracy: 70
-  unitMeleeDamage: 5
+  unitMeleeDamage: 3
   unitRangeDamage: 0
   unitPoisonDamage: 0
   unitFireDamage: 0
   unitCryoDamage: 0
   unitElectrifiedDamage: 0
   unitExplosionDamage: 0
+  CanMultipleDamage: 1

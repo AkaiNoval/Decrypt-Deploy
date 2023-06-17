@@ -13,6 +13,9 @@ public class SOWeapon : ScriptableObject
     public Sprite WeaponSprite;
     public RuntimeAnimatorController runtimeAnimController;
     public WeaponType WeaponType;
+    [Header("Range")]
+    public float CloseRange;
+    public float FarRange;
     [Header("Critical")]
     public float unitCriticalChance;
     public float unitCriticalDamage;
@@ -28,4 +31,11 @@ public class SOWeapon : ScriptableObject
     public float unitCryoDamage;
     public float unitElectrifiedDamage;
     public float unitExplosionDamage;
+    [Header("Melee Only")]
+    public bool CanMultipleDamage;
+    [Header("Range Only")]
+    public int Magazine;
+    public bool SpreadMode;
+    public int SpreadAmount;
+    public float SpreadAngle;
 }

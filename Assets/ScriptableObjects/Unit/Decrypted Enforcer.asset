@@ -28,12 +28,12 @@ MonoBehaviour:
   Speed: 1
   Agility: 50
   DodgeChance: 20
-  CloseRange: 3
+  CloseRange: 0
   FarRange: 0
   Accuracy: 75
   CriticalChance: 10
   CriticalDamage: 50
-  MeleeDamage: 5
+  MeleeDamage: 0
   RangeDamage: 0
   PoisonDamage: 0
   FireDamage: 0

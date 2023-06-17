@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class MeleeAttack : IState
 {
@@ -18,9 +17,9 @@ public class MeleeAttack : IState
     // Solution 1: Only play the animation that triggers the event keyframe in this state.
     // Solution 2: Add an additional condition to this method, allowing it to be called only if the Target is in close range.
     // Fixed by using Solution 2 => Waiting for Solution 1
-    public void DealDamage(UnitStateController unitState)
+    public void DealDamage(UnitStateController unitState, bool canMultiple)
     {
-        DealDamageToTarget(unitState);
+        DealDamageToTarget(unitState, canMultiple);
 
         DealDamageToObjective(unitState);
     }
@@ -62,34 +61,7 @@ public class MeleeAttack : IState
                 break;
         }
     }
-
-    #region DealDmgWithoutMultipleChecking
-    //void DealDamageToTarget(UnitStateController unitState)
-    //{
-    //    // Check if there is no target or if the target is not within the close range
-    //    if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
-    //    {
-    //        return; // Exit the method if the conditions are not met
-    //    }
-    //    UnitStats targetStats = unitState.Targeting.Target.GetComponent<UnitStats>();
-
-    //    // Calculate the base damage
-    //    float baseDamage = unitState.UnitStats.UnitMeleeDamage;
-
-    //    // Check for critical hit
-    //    bool isCriticalHit = UnityEngine.Random.value <= unitState.UnitStats.UnitCriticalChance / 100f;
-
-    //    // Apply critical damage multiplier if it's a critical hit
-    //    float damageMultiplier = isCriticalHit ? (1f + unitState.UnitStats.UnitCriticalDamage / 100f) : 1f;
-
-    //    // Calculate the final damage
-    //    float reducedDamage = targetStats.CalculateReducedMeleeDamage(baseDamage * damageMultiplier, isCriticalHit);
-
-    //    // Reduce the target's health by the damage amount
-    //    targetStats.UnitCurrentHealth -= reducedDamage;
-    //} 
-    #endregion
-    void DealDamageToTarget(UnitStateController unitState)
+    void DealDamageToTarget(UnitStateController unitState,bool canMultiple)
     {
         // Check if there is no target or if the target is not within the close range
         if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
@@ -115,7 +87,7 @@ public class MeleeAttack : IState
         targetStats.UnitCurrentHealth -= reducedDamage;
 
         // Check if multiple targets are allowed
-        if (unitState.CanMultipleDamage)
+        if (canMultiple)
         {
             // Find all enemies in close range
             Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(unitState.transform.position, unitState.UnitStats.UnitCloseRange, unitState.targetLayers);

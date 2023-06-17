@@ -11,30 +11,18 @@ public class RangedAttack : IState
     //Only Class Attacker is allowed to be here.
     //Play Reload animation when out of bullets but also when there is no target in range
     //Ref to the magazine
-    [SerializeField] bool spreadMode;
-    [SerializeField] int spreadAmount;
-    [SerializeField] float spreadAngle;
-    float shootDelay = 2f;
-    float lastShootTime;
-    float magazine;
-    bool isReloading;
+
+    //[SerializeField] bool spreadMode;
+    //[SerializeField] int spreadAmount;
+    //[SerializeField] float spreadAngle;
     public void EnterState(UnitStateController unitState)
     {
         unitState.currentState = CurrentState.RangedAttack;
-        lastShootTime = Time.time;
+
     }
-
-
-
     public void UpdateState(UnitStateController unitState)
     {
         SwitchState(unitState);
-        if (Time.time - lastShootTime >= shootDelay)
-        {
-            InstBullet(unitState);
-            lastShootTime = Time.time;
-        }
-
     }
     void SwitchState(UnitStateController unitState)
     {
@@ -72,7 +60,7 @@ public class RangedAttack : IState
             unitState.SwitchState(unitState.StateMeleeAttack);
         }
     }
-    void InstBullet(UnitStateController unitState)
+    public void RangeAttack(UnitStateController unitState)
     {
         // Check if there is no target
         if (unitState.Targeting.Target == null)
@@ -94,7 +82,7 @@ public class RangedAttack : IState
             Quaternion bulletRotationObj = Quaternion.AngleAxis(angleObj, Vector3.forward);
 
             // Spawn a bullet towards the objective
-            unitState.TriggerRangeAttack(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
+            InstBullet(unitState, unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
 
             return;
         }
@@ -130,10 +118,15 @@ public class RangedAttack : IState
         Quaternion bulletRotationTarget = Quaternion.AngleAxis(angleTarget, Vector3.forward);
 
         // Spawn a bullet towards the target
-        unitState.TriggerRangeAttack(unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
+        InstBullet(unitState,unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
     }
 
-
+    void InstBullet(UnitStateController unitState,GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
+    {
+        GameObject bullet = Object.Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
+        bullet.GetComponent<Bullet>().IsEnemyBullet = unitState.GetComponent<Unit>().IsEnemy;
+        bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
+    }
 
 
     #region Nothing here

@@ -9,6 +9,7 @@ public class Moving : IState
     GameObject previousTransform;
     public void EnterState(UnitStateController unitState)
     {
+        Debug.Log("Enter State here");
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
         unitState.currentState = CurrentState.Moving;
@@ -18,7 +19,7 @@ public class Moving : IState
     }
     public void ExitState(UnitStateController unitState)
     {
-        Debug.Log("You are exiting at the Moving State");
+        Debug.Log("ExitState here");
         path.canMove = false;
         Object.Destroy(previousTransform);
     }

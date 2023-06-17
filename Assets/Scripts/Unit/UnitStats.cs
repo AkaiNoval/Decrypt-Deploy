@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -88,6 +89,17 @@ public class UnitStats : MonoBehaviour
     public Class UnitClass { get => unitClass; set => unitClass = value; }
     #endregion
 
+    public bool IsDead()
+    {
+        if (UnitCurrentHealth <= 0)
+        {
+            return true; // The unit is dead
+        }
+        else
+        {
+            return false; // The unit is not dead
+        }
+    }
     private void Awake()
     {
         if (soStats == null)
@@ -141,14 +153,6 @@ public class UnitStats : MonoBehaviour
         UnitElectrifiedResistance = soStats.ElectrifiedResistance;
         UnitExplosionResistance = soStats.ExplosionResistance;
     }
-
-    private void Update()
-    {
-        if (UnitCurrentHealth <= 0) return;
-        PassiveHealing();
-        SwitchWeapon(Weapon);
-    }
-    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
     void IncreaseStatsFromWeapon(SOWeapon weapon)
     {
         UnitMeleeDamage += weapon.unitMeleeDamage;
@@ -163,7 +167,17 @@ public class UnitStats : MonoBehaviour
         UnitDodgeChance += weapon.DodgeChance;
         UnitSpeed += weapon.Speed;
         UnitAccuracy += weapon.Accuracy;
+        UnitCloseRange += weapon.CloseRange;
+        UnitFarRange += weapon.FarRange;
     }
+    void Update()
+    {
+        if (UnitCurrentHealth <= 0) return;
+        PassiveHealing();
+        SwitchWeapon(Weapon);
+    }
+    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
+    
     void SwitchWeapon(SOWeapon weapon)
     {
         // Check if the new weapon is the same as the previous weapon
@@ -179,7 +193,7 @@ public class UnitStats : MonoBehaviour
         IncreaseStatsFromWeapon(weapon);
     }
 
-    #region MeleeDamage
+    #region TakeMeleeDamage
     public float CalculateReducedMeleeDamage(float incomingDamage, bool isCritical)
     {
         float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
@@ -193,9 +207,12 @@ public class UnitStats : MonoBehaviour
     }
     #endregion
 
+    #region TakeExplosionDamage
     public void TakeExplosionDamage(float damage)
     {
         float effectiveDamage = damage * (1f - unitExplosionResistance / 100f);
         UnitCurrentHealth -= effectiveDamage;
-    }
+    } 
+    #endregion
+
 }

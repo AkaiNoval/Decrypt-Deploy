@@ -1,3 +1,4 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -13,6 +14,7 @@ public interface IState
 }
 public enum CurrentState
 {
+    Null,
     Idle,
     Moving,
     RangedAttack,
@@ -36,12 +38,12 @@ public class UnitStateController : MonoBehaviour
     public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
     public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
     [Header("Options")]
-    public bool CanMultipleDamage;
     public GameObject bulletSpawnPoint;
     public GameObject bulletPrefab;
     public Targeting Targeting { get ; set; }
     public UnitStats UnitStats { get; set; }
 
+    public AIPath aIPath;
     public bool IsCoroutineRunning { get; set; }
     public float StateSwitchDelay { get => stateSwitchDelay; set => stateSwitchDelay = Mathf.Clamp(value,0,1); }
 
@@ -49,6 +51,7 @@ public class UnitStateController : MonoBehaviour
     {
         UnitStats = GetComponent<UnitStats>();
         Targeting = GetComponent<Targeting>();
+        aIPath = GetComponent<AIPath>();    
         targetLayers = LayerMask.GetMask("Unit");
     }               
     void Start()
@@ -61,6 +64,13 @@ public class UnitStateController : MonoBehaviour
     }
     void Update()
     {
+        if (UnitStats.IsDead())
+        {
+            currentState = CurrentState.Null;
+            StopMoving();
+            return;
+        }
+        StopMoving();
         SwitchState();
         if (currentState != CurrentState.UsingPassiveAbility)
         {
@@ -97,10 +107,12 @@ public class UnitStateController : MonoBehaviour
         // Update the state based on the current state
         if (currentState == CurrentState.UsingPassiveAbility)
         {
+            state.ExitState(this);
             state = StatePassiveAbility;
         }
         else if (currentState == CurrentState.UsingActiveAbility)
         {
+            state.ExitState(this);
             state = StateActiveAbility;
         }
         else
@@ -109,6 +121,7 @@ public class UnitStateController : MonoBehaviour
         }
         // Enter the new state
         state.EnterState(this);
+
     }
 
     void SwitchState()
@@ -136,6 +149,8 @@ public class UnitStateController : MonoBehaviour
             case CurrentState.UsingPassiveAbility:
                 SwitchState(StatePassiveAbility);
                 break;
+            case CurrentState.Null:
+                break;
             default:
                 break;
         }
@@ -160,18 +175,7 @@ public class UnitStateController : MonoBehaviour
         UnitStats.SupportType.ApplySupport(this);
     }
     //Based on Animation Keyframe 
-    public void TriggerMeleeAttack()
-    {
-        // Call the DealDamage method in the MeleeAttack state
-        StateMeleeAttack.DealDamage(this);
-    }
-    //Based on Animation Keyframe 
-    public void TriggerRangeAttack(GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
-    {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
-        bullet.GetComponent<Bullet>().IsEnemyBullet = GetComponent<Unit>().IsEnemy;
-        bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
-    } 
+
     #endregion
 
     public bool CheckEnemyInCloseRange()
@@ -190,4 +194,15 @@ public class UnitStateController : MonoBehaviour
         return false; // Return false if no enemies are found
     }
 
+    void StopMoving()
+    {
+        if(currentState== CurrentState.Moving)
+        {
+            aIPath.canMove = true;
+        }
+        else
+        {
+            aIPath.canMove = false;
+        }
+    }
 }

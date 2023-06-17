@@ -7,8 +7,9 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private UnitStats unitStats;
     [SerializeField] private UnitStateController stateController;
-    private RuntimeAnimatorController previousRAC;
-    private CurrentState previouseState;
+    RuntimeAnimatorController previousRAC;
+    CurrentState previouseState;
+    [SerializeField] bool isDeathAnimationTriggered;
     private void Start()
     {
         // Set the initial animator controller during start
@@ -41,6 +42,12 @@ public class AnimationController : MonoBehaviour
     }
     private void SwitchAnimationClip()
     {
+        if (unitStats.IsDead() && isDeathAnimationTriggered == false)
+        {
+            isDeathAnimationTriggered = true;
+            animator.SetTrigger("Death");
+            return;
+        }
         if (previouseState == stateController.currentState) return;
         previouseState = stateController.currentState;
         switch (stateController.currentState)
@@ -66,13 +73,14 @@ public class AnimationController : MonoBehaviour
             case CurrentState.UsingPassiveAbility:
                 animator.SetTrigger("PassiveAbility");
                 break;
+            case CurrentState.Null:
+                animator.SetTrigger("Death");
+                break;
             default:
                 // Handle default case
                 break;
-        }
-        
+        }     
     }
-
     public void TriggerActiveAbility()
     {
         unitStats.ActiveAbility.ApplyActiveAbility(stateController);
@@ -88,6 +96,12 @@ public class AnimationController : MonoBehaviour
     public void ChangeToIdleState()
     {
         stateController.currentState = CurrentState.Idle;
+    }
+
+    public void TriggerMeleeAttack()
+    {
+        // Call the DealDamage method in the MeleeAttack state
+        stateController.StateMeleeAttack.DealDamage(stateController, unitStats.Weapon.CanMultipleDamage);
     }
 
 
