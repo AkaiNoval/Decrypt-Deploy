@@ -12,24 +12,23 @@ public class AnimationController : MonoBehaviour
     [SerializeField] bool isDeathAnimationTriggered;
     private void Start()
     {
-        // Set the initial animator controller during start
         SetAnimatorController();
     }
-    private void Update()
+    void Update()
     {
         // Check if the animator controller needs to be switched
         if (unitStats.Weapon == null) return;
         SwitchAnimatorController();
         SwitchAnimationClip();
     }
-    private void SetAnimatorController()
+    void SetAnimatorController()
     {
         // Store the initial runtime animator controller
         previousRAC = unitStats.Weapon.runtimeAnimController;
         // Assign the initial runtime animator controller to the animator
         animator.runtimeAnimatorController = previousRAC;
     }
-    private void SwitchAnimatorController()
+    void SwitchAnimatorController()
     {
         // Check if the runtime animator controller has changed
         if (previousRAC != unitStats.Weapon.runtimeAnimController)
@@ -40,7 +39,7 @@ public class AnimationController : MonoBehaviour
             animator.runtimeAnimatorController = previousRAC;
         }
     }
-    private void SwitchAnimationClip()
+    void SwitchAnimationClip()
     {
         if (unitStats.IsDead() && isDeathAnimationTriggered == false)
         {
@@ -59,7 +58,7 @@ public class AnimationController : MonoBehaviour
                 animator.SetTrigger("Moving");
                 break;
             case CurrentState.RangedAttack:
-                // Handle RangedAttack case
+                animator.SetTrigger("RangeAttack");
                 break;
             case CurrentState.CloseAttack:
                 animator.SetTrigger("MeleeAttack");
@@ -79,16 +78,9 @@ public class AnimationController : MonoBehaviour
             default:
                 // Handle default case
                 break;
-        }     
+        }
     }
-    public void TriggerActiveAbility()
-    {
-        unitStats.ActiveAbility.ApplyActiveAbility(stateController);
-    }
-    public void TriggerPassiveAbility()
-    {
-        unitStats.PassiveAbility.ApplyPassiveAbility(stateController);
-    }
+
     public void ChangeToActiveAbilityState()
     {
         stateController.currentState = CurrentState.UsingActiveAbility;
@@ -98,12 +90,13 @@ public class AnimationController : MonoBehaviour
         stateController.currentState = CurrentState.Idle;
     }
 
-    public void TriggerMeleeAttack()
+    public void TriggerMeleeAttack() => stateController.StateMeleeAttack.DealDamage(stateController, unitStats.Weapon.CanMultipleDamage);
+    public void TriggerActiveAbility() => unitStats.ActiveAbility.ApplyActiveAbility(stateController);
+    public void TriggerPassiveAbility() => unitStats.PassiveAbility.ApplyPassiveAbility(stateController);
+    public void TriggerRangeAttack() 
     {
-        // Call the DealDamage method in the MeleeAttack state
-        stateController.StateMeleeAttack.DealDamage(stateController, unitStats.Weapon.CanMultipleDamage);
+        stateController.StateRangeAttack.RangeAttack(stateController);
     }
-
 
 
 }

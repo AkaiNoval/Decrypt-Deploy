@@ -16,7 +16,7 @@ MonoBehaviour:
   runtimeAnimController: {fileID: 9100000, guid: e7f83a49f8c97d040b1ad50f85799a79, type: 2}
   WeaponType: 1
   CloseRange: 0
-  FarRange: 5
+  FarRange: 7
   unitCriticalChance: 20
   unitCriticalDamage: 20
   DodgeChance: 0
@@ -31,6 +31,6 @@ MonoBehaviour:
   unitExplosionDamage: 0
   CanMultipleDamage: 0
   Magazine: 0
-  SpreadMode: 0
-  SpreadAmount: 0
-  SpreadAngle: 0
+  EnableMultipleBullets: 1
+  BulletPerShot: 10
+  SpreadAngle: 30

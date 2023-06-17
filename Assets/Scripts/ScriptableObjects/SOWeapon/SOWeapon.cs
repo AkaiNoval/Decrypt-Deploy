@@ -35,7 +35,7 @@ public class SOWeapon : ScriptableObject
     public bool CanMultipleDamage;
     [Header("Range Only")]
     public int Magazine;
-    public bool SpreadMode;
-    public int SpreadAmount;
+    public bool EnableMultipleBullets;
+    public int BulletPerShot;
     public float SpreadAngle;
 }

@@ -118,15 +118,45 @@ public class RangedAttack : IState
         Quaternion bulletRotationTarget = Quaternion.AngleAxis(angleTarget, Vector3.forward);
 
         // Spawn a bullet towards the target
-        InstBullet(unitState,unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
+        InstBullet(unitState, unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
     }
 
-    void InstBullet(UnitStateController unitState,GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
+    void InstBullet(UnitStateController unitState, GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
+    {
+        if (unitState.UnitStats.Weapon.EnableMultipleBullets)
+        {
+            // Shotgun behavior - Spawn multiple bullets with spread
+            int bulletPerShot = unitState.UnitStats.Weapon.BulletPerShot; 
+            float spreadAngle = unitState.UnitStats.Weapon.SpreadAngle; 
+
+            float spreadOffset = spreadAngle / (bulletPerShot - 1); // Calculate the offset between each bullet
+
+            for (int i = 0; i < bulletPerShot; i++)
+            {
+                // Calculate the angle for the current bullet
+                float bulletAngle = -spreadAngle / 2 + (i * spreadOffset);
+
+                // Apply the bullet angle to the rotation
+                Quaternion bulletRotation = rotation * Quaternion.Euler(0f, 0f, bulletAngle);
+
+                // Spawn a bullet with the rotated direction
+                SpawnBullet(unitState, bulletPrefab, bulletSpawnPoint, bulletRotation, rangedDamage);
+            }
+        }
+        else
+        {
+            // Single bullet behavior - Spawn a single bullet without spread
+            SpawnBullet(unitState, bulletPrefab, bulletSpawnPoint, rotation, rangedDamage);
+        }
+    }
+
+    void SpawnBullet(UnitStateController unitState, GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)
     {
         GameObject bullet = Object.Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
         bullet.GetComponent<Bullet>().IsEnemyBullet = unitState.GetComponent<Unit>().IsEnemy;
         bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
     }
+
 
 
     #region Nothing here
