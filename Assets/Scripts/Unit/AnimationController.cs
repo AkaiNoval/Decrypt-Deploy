@@ -8,16 +8,23 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private UnitStats unitStats;
     [SerializeField] private UnitStateController stateController;
     RuntimeAnimatorController previousRAC;
-    CurrentState previouseState;
+    [SerializeField] CurrentState previouseState;
     [SerializeField] bool isDeathAnimationTriggered;
+    [SerializeField] int magazine;
+    [SerializeField] int bulletsRemaining;
+
+
     private void Start()
     {
         SetAnimatorController();
+        magazine = unitStats.Weapon.MagazineCapacity;
+        bulletsRemaining = magazine;
     }
     void Update()
     {
         // Check if the animator controller needs to be switched
         if (unitStats.Weapon == null) return;
+        CheckDefaultMagazine();
         SwitchAnimatorController();
         SwitchAnimationClip();
     }
@@ -41,7 +48,7 @@ public class AnimationController : MonoBehaviour
     }
     void SwitchAnimationClip()
     {
-        if (unitStats.IsDead() && isDeathAnimationTriggered == false)
+        if (unitStats.IsDead() && !isDeathAnimationTriggered)
         {
             isDeathAnimationTriggered = true;
             animator.SetTrigger("Death");
@@ -49,6 +56,10 @@ public class AnimationController : MonoBehaviour
         }
         if (previouseState == stateController.currentState) return;
         previouseState = stateController.currentState;
+        SwitchAnimationDuringRunTime();
+    }
+    void SwitchAnimationDuringRunTime()
+    {
         switch (stateController.currentState)
         {
             case CurrentState.Idle:
@@ -58,7 +69,7 @@ public class AnimationController : MonoBehaviour
                 animator.SetTrigger("Moving");
                 break;
             case CurrentState.RangedAttack:
-                animator.SetTrigger("RangeAttack");
+                animator.SetTrigger(ShouldReload() ? "Reloading" : "RangeAttack");
                 break;
             case CurrentState.CloseAttack:
                 animator.SetTrigger("MeleeAttack");
@@ -72,12 +83,26 @@ public class AnimationController : MonoBehaviour
             case CurrentState.UsingPassiveAbility:
                 animator.SetTrigger("PassiveAbility");
                 break;
-            case CurrentState.Null:
+            case CurrentState.Death:
                 animator.SetTrigger("Death");
                 break;
             default:
                 // Handle default case
                 break;
+        }
+    }
+
+    public bool ShouldReload() => magazine > 0 && bulletsRemaining <= 0;
+
+    void CheckDefaultMagazine()
+    {
+        if (magazine != unitStats.Weapon.MagazineCapacity)
+        {
+            magazine = unitStats.Weapon.MagazineCapacity;
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -90,13 +115,29 @@ public class AnimationController : MonoBehaviour
         stateController.currentState = CurrentState.Idle;
     }
 
-    public void TriggerMeleeAttack() => stateController.StateMeleeAttack.DealDamage(stateController, unitStats.Weapon.CanMultipleDamage);
+    public void TriggerMeleeAttack()
+    {
+        stateController.StateMeleeAttack.DealDamage(stateController, unitStats.Weapon.CanMultipleDamage);
+        Debug.Log("I'm " + gameObject.name + " unitStats.Weapon.CanMultipleDamage is " + unitStats.Weapon.CanMultipleDamage);
+    }
     public void TriggerActiveAbility() => unitStats.ActiveAbility.ApplyActiveAbility(stateController);
     public void TriggerPassiveAbility() => unitStats.PassiveAbility.ApplyPassiveAbility(stateController);
     public void TriggerRangeAttack() 
     {
         stateController.StateRangeAttack.RangeAttack(stateController);
+        bulletsRemaining--;
+        if (!ShouldReload()) return;
+        SwitchAnimationDuringRunTime();
+
     }
+    public void TriggerReloading()
+    {
+        bulletsRemaining = magazine;
+        //Go Back to Idle after finishing reloading to cycle the state one again
+        animator.SetTrigger("Idle");
+        previouseState = CurrentState.Idle;
+    }
+
 
 
 }

@@ -15,22 +15,22 @@ MonoBehaviour:
   WeaponSprite: {fileID: 4090386550594248903, guid: abeab81a5673ced428754a67d26bdd17, type: 3}
   runtimeAnimController: {fileID: 9100000, guid: e7f83a49f8c97d040b1ad50f85799a79, type: 2}
   WeaponType: 1
-  CloseRange: 0
-  FarRange: 7
+  CloseRange: 3
+  FarRange: 10
   unitCriticalChance: 20
   unitCriticalDamage: 20
   DodgeChance: 0
   Speed: 0
-  Accuracy: 33
-  unitMeleeDamage: 0
-  unitRangeDamage: 10
+  Accuracy: 0
+  unitMeleeDamage: 3
+  unitRangeDamage: 20
   unitPoisonDamage: 0
   unitFireDamage: 0
   unitCryoDamage: 0
   unitElectrifiedDamage: 0
   unitExplosionDamage: 0
   CanMultipleDamage: 0
-  Magazine: 0
-  EnableMultipleBullets: 1
-  BulletPerShot: 10
-  SpreadAngle: 30
+  MagazineCapacity: 2
+  EnableMultipleBullets: 0
+  BulletPerShot: 0
+  SpreadAngle: 0

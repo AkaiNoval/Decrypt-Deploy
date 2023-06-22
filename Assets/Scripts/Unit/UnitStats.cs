@@ -18,14 +18,16 @@ public class UnitStats : MonoBehaviour
     [Header("Weapon")]
     public SOWeapon Weapon;
     SOWeapon previousWeapon;
-    [Header("Stats")]
+    [Header("Info")]
     [SerializeField] int unitCost;
     [SerializeField] float unitCharisma;
     [SerializeField] float preparationTime;
+    [SerializeField] float damageDealt;
+    [TextArea][SerializeField] string causeOfDeath;
     [Header("Health")]
     [SerializeField] float maxHealth;   
     [SerializeField] float currentHealth;   
-    [SerializeField] float healingSpeed;
+    [SerializeField] float healingAmountPerSecond;
     [Header("Basic")]
     [SerializeField] float unitMorale;
     [SerializeField] float unitSpeed;
@@ -55,14 +57,15 @@ public class UnitStats : MonoBehaviour
     [SerializeField] float unitExplosionResistance;
 
     #region Properties
+    public SOUnitStats SoStats { get => soStats; private set => soStats = value; }
     public float UnitMaxHealth { get => maxHealth; set => maxHealth = value; }
     public float UnitCurrentHealth { get => currentHealth; set => currentHealth = Mathf.Clamp(value, 0, maxHealth); }
-    public float UnitHealingSpeed { get => healingSpeed; set => healingSpeed = value; }
+    public float HealingAmountPerSecond { get => healingAmountPerSecond; set => healingAmountPerSecond = value; }
     public float UnitMorale { get => unitMorale; set => unitMorale = value; }
     public float UnitPreparationTime { get => preparationTime; set => preparationTime = value; }
     public int UnitCost { get => unitCost; set => unitCost = value; }
     public float UnitCharisma { get => unitCharisma; set => unitCharisma = value; }
-    public float UnitSpeed { get => unitSpeed; set => unitSpeed = value; }
+    public float UnitSpeed { get => unitSpeed; set => unitSpeed = Mathf.Clamp(value,0.1f,3f); }
     public float UnitAgility { get => unitAgility; set => unitAgility = value; }
     public float UnitDodgeChance { get => unitDodgeChance; set => unitDodgeChance = value; }
     public float UnitCloseRange { get => unitCloseRange; set => unitCloseRange = value; }
@@ -87,6 +90,7 @@ public class UnitStats : MonoBehaviour
     public float UnitElectrifiedResistance { get => unitElectrifiedResistance; set => unitElectrifiedResistance = value; }
     public float UnitExplosionResistance { get => unitExplosionResistance; set => unitExplosionResistance = value; }
     public Class UnitClass { get => unitClass; set => unitClass = value; }
+    public string CauseOfDeath { get => causeOfDeath; set => causeOfDeath = value; }
     #endregion
 
     public bool IsDead()
@@ -100,9 +104,10 @@ public class UnitStats : MonoBehaviour
             return false; // The unit is not dead
         }
     }
+    bool wasDead = false;
     private void Awake()
     {
-        if (soStats == null)
+        if (SoStats == null)
         {
             Debug.LogWarning("Unit Stats SO is empty, please check again"); return;
         }
@@ -117,41 +122,41 @@ public class UnitStats : MonoBehaviour
 
     private void GetBaseStats()
     {
-        unitName = soStats.name;
-        unitID = soStats.ID;
+        unitName = SoStats.name;
+        unitID = SoStats.ID;
         //Properties
-        UnitClass = soStats.Class;
-        UnitCost = soStats.Cost;
-        UnitPreparationTime = soStats.PreparationTime;
-        UnitMaxHealth = soStats.MaxHealth;
+        UnitClass = SoStats.Class;
+        UnitCost = SoStats.Cost;
+        UnitPreparationTime = SoStats.PreparationTime;
+        UnitMaxHealth = SoStats.MaxHealth;
         UnitCurrentHealth = UnitMaxHealth;
-        UnitHealingSpeed = soStats.HealingSpeed;
-        UnitMorale = soStats.Morale;
-        UnitCharisma = soStats.Charisma;
-        UnitSpeed = soStats.Speed;
-        UnitAgility = soStats.Agility;
-        UnitDodgeChance = soStats.DodgeChance;
-        UnitCloseRange = soStats.CloseRange;
-        UnitFarRange = soStats.FarRange;
-        UnitAccuracy = soStats.Accuracy;
-        UnitCriticalChance = soStats.CriticalChance;
-        UnitCriticalDamage = soStats.CriticalDamage;
+        HealingAmountPerSecond = SoStats.HealingAmountPerSecond;
+        UnitMorale = SoStats.Morale;
+        UnitCharisma = SoStats.Charisma;
+        UnitSpeed = SoStats.Speed;
+        UnitAgility = SoStats.Agility;
+        UnitDodgeChance = SoStats.DodgeChance;
+        UnitCloseRange = SoStats.CloseRange;
+        UnitFarRange = SoStats.FarRange;
+        UnitAccuracy = SoStats.Accuracy;
+        UnitCriticalChance = SoStats.CriticalChance;
+        UnitCriticalDamage = SoStats.CriticalDamage;
         //Damage Type
-        UnitMeleeDamage = soStats.MeleeDamage;
-        UnitRangeDamage = soStats.RangeDamage;
-        UnitPoisonDamage = soStats.PoisonDamage;
-        UnitFireDamage = soStats.FireDamage;
-        UnitCryoDamage = soStats.CryoDamage;
-        UnitElectrifiedDamage = soStats.ElectrifiedDamage;
-        UnitExplosionDamage = soStats.ExplosionDamage;
+        UnitMeleeDamage = SoStats.MeleeDamage;
+        UnitRangeDamage = SoStats.RangeDamage;
+        UnitPoisonDamage = SoStats.PoisonDamage;
+        UnitFireDamage = SoStats.FireDamage;
+        UnitCryoDamage = SoStats.CryoDamage;
+        UnitElectrifiedDamage = SoStats.ElectrifiedDamage;
+        UnitExplosionDamage = SoStats.ExplosionDamage;
         //Resistance
-        UnitBulletResistance = soStats.BulletResistance;
-        UnitMeleeResistance = soStats.MeleeResistance;
-        UnitPoisonResistance = soStats.PoisonResistance;
-        UnitFireResistance = soStats.FireResistance;
-        UnitCryoResistance = soStats.CryoResistance;
-        UnitElectrifiedResistance = soStats.ElectrifiedResistance;
-        UnitExplosionResistance = soStats.ExplosionResistance;
+        UnitBulletResistance = SoStats.BulletResistance;
+        UnitMeleeResistance = SoStats.MeleeResistance;
+        UnitPoisonResistance = SoStats.PoisonResistance;
+        UnitFireResistance = SoStats.FireResistance;
+        UnitCryoResistance = SoStats.CryoResistance;
+        UnitElectrifiedResistance = SoStats.ElectrifiedResistance;
+        UnitExplosionResistance = SoStats.ExplosionResistance;
     }
     void IncreaseStatsFromWeapon(SOWeapon weapon)
     {
@@ -172,11 +177,23 @@ public class UnitStats : MonoBehaviour
     }
     void Update()
     {
-        if (UnitCurrentHealth <= 0) return;
+        OnDeath();
+        if (IsDead()) return;
         PassiveHealing();
         SwitchWeapon(Weapon);
     }
-    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + UnitHealingSpeed * Time.deltaTime, 0, UnitMaxHealth);
+    void OnDeath()
+    {
+        if (IsDead() && !wasDead)
+        {
+            wasDead= true;
+            Collider2D collider2D = gameObject.GetComponent<Collider2D>();
+            collider2D.enabled = false;
+            DeathManager.Instance.AddToDeathList(gameObject);
+            return;
+        }
+    }
+    void PassiveHealing() => UnitCurrentHealth = Mathf.Clamp(UnitCurrentHealth + HealingAmountPerSecond * Time.deltaTime, 0, UnitMaxHealth);
     
     void SwitchWeapon(SOWeapon weapon)
     {
@@ -194,9 +211,9 @@ public class UnitStats : MonoBehaviour
     }
 
     #region TakeMeleeDamage
-    public float CalculateReducedMeleeDamage(float incomingDamage, bool isCritical)
+    public float CalculateReducedDamage(float incomingDamage, float resistanceType, bool isCritical)
     {
-        float damageReduction = UnitMeleeResistance / 100f; // Convert percentage to decimal
+        float damageReduction = resistanceType / 100f; // Convert percentage to decimal
         float reducedDamage = incomingDamage * (1f - damageReduction);
         if (isCritical)
         {
@@ -207,6 +224,7 @@ public class UnitStats : MonoBehaviour
     }
     #endregion
 
+
     #region TakeExplosionDamage
     public void TakeExplosionDamage(float damage)
     {
@@ -214,5 +232,6 @@ public class UnitStats : MonoBehaviour
         UnitCurrentHealth -= effectiveDamage;
     } 
     #endregion
+    
 
 }

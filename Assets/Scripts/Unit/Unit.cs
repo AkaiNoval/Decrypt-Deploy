@@ -5,29 +5,25 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [SerializeField] bool isEnemy;
+    [SerializeField] GameObject AbilityIcon;
     UnitStats unitStats;
-    bool hasUnitStats; // Flag to indicate if the unit has UnitStats component
-
     public bool IsEnemy
     {
         get { return isEnemy; }
-        set
+        private set
         {
-            if (isEnemy != value)
-            {
-                isEnemy = value;
-                UpdateUnitList();
-            }
+            Debug.Log("Hi");
+            isEnemy = value;
         }
     }
     private void Awake()
     {
         unitStats = GetComponent<UnitStats>();
-        hasUnitStats = unitStats != null; // Check if the unit has UnitStats component
     }
 
     private void Update()
     {
+        HideUIEnemy();
         UpdateUnitList();
     }
     private void OnDisable()
@@ -51,7 +47,26 @@ public class Unit : MonoBehaviour
         else
             UnitManager.AllyList.Add(this); // Add the unit to AllyList
     }
+    void HideUIEnemy()
+    {  
+        if (AbilityIcon != null)
+        {
 
+            if (isEnemy)
+            {
+                if (!isEnemy) return;
+                AbilityIcon.SetActive(false);
+            }
+            else
+            {
+                AbilityIcon.SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("AbilityIcon is not assigned");
+        }
+    }
     public Vector3 GetPosition() => transform.position;
     public bool IsDead() => unitStats.IsDead();
 

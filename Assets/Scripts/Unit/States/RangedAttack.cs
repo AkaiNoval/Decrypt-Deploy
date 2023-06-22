@@ -1,20 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class RangedAttack : IState
 {
-
-    //Only Class Attacker is allowed to be here.
-    //Play Reload animation when out of bullets but also when there is no target in range
-    //Ref to the magazine
-
-    //[SerializeField] bool spreadMode;
-    //[SerializeField] int spreadAmount;
-    //[SerializeField] float spreadAngle;
     public void EnterState(UnitStateController unitState)
     {
         unitState.currentState = CurrentState.RangedAttack;
@@ -26,6 +20,10 @@ public class RangedAttack : IState
     }
     void SwitchState(UnitStateController unitState)
     {
+        if(unitState.Targeting.Target == null)
+        {
+            unitState.Targeting.DistanceToTarget = 0;
+        }
         // If the objective is still in the far range and outside the close range, keep the current state
         if (unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange && unitState.Targeting.DistanceToObj <= unitState.UnitStats.UnitFarRange)
         {
@@ -47,11 +45,11 @@ public class RangedAttack : IState
             unitState.SwitchState(unitState.StateMoving);
         }
         // If the distance to the target is within both the far range and close range, switch to the melee attack state
-        if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange)
+        if (unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget <= unitState.UnitStats.UnitCloseRange && unitState.Targeting.Target != null)
         {
             unitState.SwitchState(unitState.StateMeleeAttack);
         }
-        if (unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
+        if (unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitFarRange && unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange && unitState.Targeting.Target != null)
         {
             unitState.SwitchState(unitState.StateMoving);
         }
@@ -93,9 +91,10 @@ public class RangedAttack : IState
             return; // Target is too far, return
         }
 
-        Collider2D targetCollider = unitState.Targeting.Target.GetComponent<Collider2D>();
+        CapsuleCollider2D targetCollider = unitState.Targeting.Target.GetComponent<CapsuleCollider2D>();
         if (targetCollider == null)
         {
+            Debug.LogWarning("Target have no Collider2D, please check again");
             return; // Invalid target collider, return
         }
 
@@ -104,15 +103,10 @@ public class RangedAttack : IState
 
         // Calculate the direction to the target
         Vector2 directionToTarget = targetCenter - unitState.bulletSpawnPoint.transform.position;
-
+ 
         // Calculate the angle to point towards the target
-        float angleTarget = Vector3.Angle(Vector3.right, directionToTarget);
-
-        // Flip the angle if the target is below the unit
-        if (unitState.Targeting.Target.transform.position.y < unitState.transform.position.y)
-        {
-            angleTarget *= -1;
-        }
+        //float angleTarget = Vector3.Angle(Vector3.right, directionToTarget);
+        float angleTarget = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
 
         // Create a rotation based on the calculated angle
         Quaternion bulletRotationTarget = Quaternion.AngleAxis(angleTarget, Vector3.forward);
@@ -154,11 +148,21 @@ public class RangedAttack : IState
     {
         GameObject bullet = Object.Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, rotation);
         bullet.GetComponent<Bullet>().IsEnemyBullet = unitState.GetComponent<Unit>().IsEnemy;
-        bullet.GetComponent<Bullet>().BulletDamage = rangedDamage;
+        bullet.GetComponent<Bullet>().BulletDamage = GetDamage(unitState);
+        bullet.GetComponent<Bullet>().IsCritical = CheckForCritical(unitState);
+        bullet.GetComponent<Bullet>().KillCounter = unitState.KillCounter;
+        bullet.GetComponent<Bullet>().BulletOwner = unitState.UnitStats;
     }
+    bool  CheckForCritical(UnitStateController unitState) => UnityEngine.Random.value <= unitState.UnitStats.UnitCriticalChance / 100f;
+    float  GetDamage(UnitStateController unitState)
+    {
+        // Calculate the base damage
+        float baseDamage = unitState.UnitStats.UnitRangeDamage;
+        // Apply critical damage multiplier if it's a critical hit
+        float damageMultiplier = CheckForCritical(unitState) ? (1f + unitState.UnitStats.UnitCriticalDamage / 100f) : 1f;
 
-
-
+        return baseDamage * damageMultiplier;
+    }
     #region Nothing here
     public void ExitState(UnitStateController unitState)
     {

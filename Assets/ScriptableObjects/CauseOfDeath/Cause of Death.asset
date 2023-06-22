@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da19481d6dd87240b2804b2103d6188, type: 3}
+  m_Name: Cause of Death
+  m_EditorClassIdentifier: 
+  meleeDeath:
+  - '"They engaged in a game of ''whack-a-mole'' with an anvil. They were the mole."'
+  - '"They attempted to engage in close-quarters combat but got a little too close
+    for comfort."'
+  - '"Their attempts at melee combat left their opponents more amused than threatened."'
+  - '"They attempted to engage in an epic slap fight but accidentally slapped themselves
+    into defeat."'
+  - '"They attempted to distract their opponents with a magic trick during melee
+    combat, but their disappearing act went a bit too well. They vanished themselves."'
+  - '"They decided to go ''full mime'' during melee combat, using invisible weapons
+    and walls. Their opponents simply watched and laughed before defeating them."'
+  - '"They tried to channel their inner superhero and yelled ''Bam!'' and ''Pow!''
+    with every melee strike. Their enemies couldn''t help but burst into laughter
+    before overwhelming them."'
+  - '"In a moment of confusion, they hugged their enemies tightly during melee combat,
+    leading to an awkward defeat."'
+  - '"In an attempt to intimidate their foes, they yelled a battle cry but accidentally
+    swallowed a bug mid-shout, leaving them coughing and defeated."'
+  - '"They attempted a powerful uppercut, but missed their opponent and ended up
+    hitting themselves in the face."'
+  bulletDeath:
+  - '"They played a game of ''dodge the bullets'' and lost. Big time."'
+  - '"They tried to catch the bullet with their teeth, but it wasn''t their lucky
+    day."'
+  - '"They believed they had the reflexes of a ninja, but bullets don''t care about
+    ninja dreams."'
+  - '"They believed they had the reflexes of a ninja, but bullets don''t care about
+    ninja dreams."'
+  - '"They tried to use their charm to stop the bullets. Spoiler alert: bullets aren''t
+    easily swayed."'
+  - '"They thought they could outrun the bullets. Hint: bullets are faster."'
+  - '"They thought they could negotiate with bullets. Turns out, bullets are not
+    great at compromise."'
+  - '"They tried to bribe the bullets with chocolate. Turns out, bullets are on a
+    strict diet."'
+  - '"They thought they could outsmart the bullets by playing dead. The bullets were
+    unimpressed and played along."'
+  - '"The bullet hit them square in the chest, revealing a hidden message: ''Game
+    Over, Mortal.'''
+  explosionDeath:
+  - '"KABOOM! They went out with a bang, leaving a smoking crater as a souvenir."'
+  - '"Their explosive exit was so epic that even action heroes would tip their hats
+    in respect."'
+  - '"BOOM! Their enemies witnessed the true meaning of ''explosive personality.''"'
+  - '"They went out with a bang, literally. Talk about leaving an explosive impression!"'
+  - '"Boom! They became the human equivalent of a firework, lighting up the battlefield
+    in a dazzling display."'
+  - '"In a comedic twist, they became the star of their very own explosion-themed
+    magic show. Abracadabra, and poof!"'
+  - '"Boom goes the dynamite! They transformed into the world''s funniest explosion,
+    leaving everyone in stitches."'
+  - '"They embraced the philosophy of ''go big or go home'' and went out in a blaze
+    of comedic glory."'
+  - '"They exploded like a confetti cannon at a birthday party, showering the battlefield
+    with colorful chaos."'
+  - '"Boom! They turned into a cloud of glitter, leaving their enemies both amazed
+    and thoroughly confused."'
+  poisonDeath:
+  - '"They sipped from the wrong cup and discovered too late that poison and lemonade
+    don''t mix well."'
+  - '"Their attempt to become a gourmet chef backfired when they accidentally seasoned
+    their dish with a deadly dose of poison."'
+  - '"They thought they were attending a wine tasting event, but little did they
+    know they were the main course for the Poison Sommelier."'
+  - '"They inhaled a cloud of toxic mist, thinking it was a refreshing spa treatment.
+    Looks like they got the ''poisoned pores'' special instead."'
+  - '"In a moment of confusion, they mistook a toxic fog for a cozy blanket of marshmallow
+    fluff. Let''s just say it didn''t end well for their taste buds."'
+  - '"They thought they had found the ultimate smoke party, but little did they know
+    it was ''Poison Smoke 101: Not Recommended for Social Gatherings.'''
+  - '"In an attempt to impress their friends with their ''smoke blending'' skills,
+    they became the life (and death) of the poisonous party."'
+  - '"They dove headfirst into a cloud of toxic smoke, hoping for an invigorating
+    sensation. Let''s just say it took their breath away... permanently."'
+  - '"They thought they had mastered the art of holding their breath, but the poison
+    had other plans and played a sneaky game of ''Guess Who''s Inside Your Lungs?''"'
+  - '"They took a deep breath, expecting fresh air, but instead, they got a toxic
+    blend that left them feeling ''refreshed'' in all the wrong ways."'
+  fireDeath:
+  - '"They went from ''hot stuff'' to ''hotter than the sun'' in record time."'
+  - '"They thought they could handle the heat, but the fire had other plans and turned
+    them into a crispy critter."'
+  - '"They played with fire and, well, the fire played back with a vengeance."'
+  - '"They had dreams of becoming a human torch but ended up as a human s''more instead."'
+  - '"They decided to become a fire dancer but forgot that dancing with flames is
+    a skill best left to the professionals."'
+  - '"They became the ''Hottest Disaster of the Year'' award winner, leaving a trail
+    of burnt toast in their wake."'
+  - '"Their encounter with the fire was a real ''hot mess,'' turning their plans
+    into a pile of ashes."'
+  - '"They decided to embrace their inner dragon but forgot that fire-breathing is
+    best left to the mythical creatures."'
+  - '"They became a cautionary tale for all aspiring fire-eaters, reminding everyone
+    that the fire always wins."'
+  - '"They thought they were invincible until the fire whispered, ''Hold my beer,''
+    and proved them wrong."'
+  cryoDeath:
+  - '"They thought they could handle the icy embrace, but their dreams of becoming
+    a frozen superhero quickly melted away."'
+  - '"In a chilling turn of events, they realized that being an ice sculpture is
+    not a viable career option."'
+  - '"They attempted the world record for the longest cryo-nap but overslept and
+    became an unintentional cryo-cicle."'
+  - '"They took the concept of ''brain freeze'' to a whole new level, proving that
+    cryo damage can be a real headache."'
+  - '"They found out the hard way that being ''iced'' in a game isn''t as refreshing
+    as it sounds."'
+  - '"They attempted to become the next Ice Age fashion trendsetter, but unfortunately,
+    they froze their chances along the way."'
+  - '"They discovered that trying to make snow angels on a battlefield is not as
+    serene as it seems."'
+  - '"In a bone-chilling twist, they discovered that Elsa''s powers are best left
+    to the realm of fantasy."'
+  - '"They became the star of their own icy horror movie, where being ''Frozen Solid''
+    was the most unflattering role to play."'
+  - '"They embraced their inner ice sculpture, but forgot that mobility is a key
+    factor in surviving a battle."'
+  electricDeath:
+  - '"They thought they could become the next ''Electro-Master,'' but the electric
+    surge had a different plan in mind: a humbling defeat."'
+  - '"In their attempt to become a human lightning rod, they realized that conducting
+    electricity wasn''t their strongest suit."'
+  - '"They received a shocking reality check that ''Electrifying Dance Moves'' are
+    best left to professional performers, not battlefield acrobatics."'
+  - '"They discovered that being ''charged up'' in a game isn''t as energizing as
+    a good cup of coffee."'
+  - '"They tried to become the ultimate ''Electric Hero,'' but ended up more like
+    a malfunctioning toaster."'
+  - '"They took the saying ''dance like nobody''s watching'' a bit too literally
+    and ended up executing an unplanned, electrifying performance."'
+  - '"They attempted to embrace their inner Pikachu, but discovered that real-life
+    electric encounters aren''t as cute and cuddly."'
+  - '"In an electrifying turn of events, they realized that challenging a thunderstorm
+    to a game of ''Simon Says'' was a shocking decision."'
+  - '"They tried to emulate their favorite movie scene where a character harnesses
+    electricity, but they quickly realized they were missing the essential ''Plot
+    Armor'' ingredient."'
+  - '"In a comical twist of fate, they tried to summon their inner ''Thor'' with
+    a mighty lightning strike, but ended up channeling their inner ''Sparkler'' instead."'

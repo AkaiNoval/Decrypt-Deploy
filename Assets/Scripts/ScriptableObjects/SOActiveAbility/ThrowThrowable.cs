@@ -7,7 +7,7 @@ public class ThrowThrowable : ActiveAbilityBase
     public GameObject Throwable;
     public float UpwardModifier;
     public float VelocityModifier;
-    public float RotationSpeed; // New variable for rotation speed
+    public float RotationSpeed; 
     public float LifeTime;
 
     public override void ApplyActiveAbility(UnitStateController unitState)
@@ -17,7 +17,10 @@ public class ThrowThrowable : ActiveAbilityBase
 
     void ThrowFragGrenade(UnitStateController unitState)
     {
+
         GameObject fragGrenade = Instantiate(Throwable);
+        Grenade grenade = fragGrenade.GetComponent<Grenade>();
+        grenade.killCounter = unitState.KillCounter;
         fragGrenade.transform.position = unitState.transform.position;
         Rigidbody2D rb = fragGrenade.GetComponent<Rigidbody2D>();
         rb.AddForce(Vector2.up * UpwardModifier, ForceMode2D.Impulse);

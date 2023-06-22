@@ -14,7 +14,7 @@ public interface IState
 }
 public enum CurrentState
 {
-    Null,
+    Death,
     Idle,
     Moving,
     RangedAttack,
@@ -42,8 +42,11 @@ public class UnitStateController : MonoBehaviour
     public GameObject bulletPrefab;
     public Targeting Targeting { get ; set; }
     public UnitStats UnitStats { get; set; }
+    public KillCounter KillCounter;
+    public Unit unit;
+    public AnimationController animationController;
 
-    public AIPath aIPath;
+    AIPath aIPath;
     public bool IsCoroutineRunning { get; set; }
     public float StateSwitchDelay { get => stateSwitchDelay; set => stateSwitchDelay = Mathf.Clamp(value,0,1); }
 
@@ -51,8 +54,10 @@ public class UnitStateController : MonoBehaviour
     {
         UnitStats = GetComponent<UnitStats>();
         Targeting = GetComponent<Targeting>();
-        aIPath = GetComponent<AIPath>();    
+        unit = GetComponent<Unit>();
+        aIPath = GetComponent<AIPath>();
         targetLayers = LayerMask.GetMask("Unit");
+        
     }               
     void Start()
     {
@@ -66,7 +71,7 @@ public class UnitStateController : MonoBehaviour
     {
         if (UnitStats.IsDead())
         {
-            currentState = CurrentState.Null;
+            currentState = CurrentState.Death;
             StopMoving();
             return;
         }
@@ -90,6 +95,7 @@ public class UnitStateController : MonoBehaviour
     public void SwitchState(IState newState)
     {
         if (state == newState) return;
+        SwitchStateInterfere();
         StartCoroutine(DelayedStateSwitch(newState));
     }
     IEnumerator DelayedStateSwitch(IState newState)
@@ -149,13 +155,17 @@ public class UnitStateController : MonoBehaviour
             case CurrentState.UsingPassiveAbility:
                 SwitchState(StatePassiveAbility);
                 break;
-            case CurrentState.Null:
+            case CurrentState.Death:
                 break;
             default:
                 break;
         }
     }
 
+    void SwitchStateInterfere()
+    {
+        if (animationController.ShouldReload()) { return; }
+    }
     #region AnimationEvent keyframe
 
 

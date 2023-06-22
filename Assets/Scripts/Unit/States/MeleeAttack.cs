@@ -64,10 +64,7 @@ public class MeleeAttack : IState
     void DealDamageToTarget(UnitStateController unitState,bool canMultiple)
     {
         // Check if there is no target or if the target is not within the close range
-        if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange)
-        {
-            return; // Exit the method if the conditions are not met
-        }
+        if (unitState.Targeting.Target == null || unitState.Targeting.DistanceToTarget > unitState.UnitStats.UnitCloseRange) return;
 
         UnitStats targetStats = unitState.Targeting.Target.GetComponent<UnitStats>();
 
@@ -81,39 +78,50 @@ public class MeleeAttack : IState
         float damageMultiplier = isCriticalHit ? (1f + unitState.UnitStats.UnitCriticalDamage / 100f) : 1f;
 
         // Calculate the final damage
-        float reducedDamage = targetStats.CalculateReducedMeleeDamage(baseDamage * damageMultiplier, isCriticalHit);
-
+        float reducedDamage = targetStats.CalculateReducedDamage(baseDamage * damageMultiplier, targetStats.UnitMeleeResistance, isCriticalHit);
+        if(targetStats.UnitCurrentHealth <= reducedDamage)
+        {
+            AddDeadEnemyToCounter(unitState, targetStats.SoStats);
+        }
         // Reduce the target's health by the damage amount
         targetStats.UnitCurrentHealth -= reducedDamage;
-
+        unitState.KillCounter.DamageDealt += reducedDamage;
         // Check if multiple targets are allowed
-        if (canMultiple)
+        if (!canMultiple) return;
+        // Find all enemies in close range
+        Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(unitState.transform.position, unitState.UnitStats.UnitCloseRange, unitState.targetLayers);
+        
+        // Apply damage to each enemy in range
+        foreach (var enemyCollider in enemiesColliders)
         {
-            // Find all enemies in close range
-            Collider2D[] enemiesColliders = Physics2D.OverlapCircleAll(unitState.transform.position, unitState.UnitStats.UnitCloseRange, unitState.targetLayers);
-
-            // Apply damage to each enemy in range
-            foreach (var enemyCollider in enemiesColliders)
+            Unit enemyUnit = enemyCollider.GetComponent<Unit>();
+            // Check if the collider belongs to an enemy unit
+            if (enemyUnit != null && enemyUnit.IsEnemy != unitState.unit.IsEnemy)
             {
-                Unit enemyUnit = enemyCollider.GetComponent<Unit>();
-                // Check if the collider belongs to an enemy unit
-                if (enemyUnit != null && enemyUnit.IsEnemy)
+                // Exclude the initially targeted enemy (already dealt damage above)
+                if (enemyUnit != unitState.Targeting.Target)
                 {
-                    // Exclude the initially targeted enemy (already dealt damage above)
-                    if (enemyUnit != unitState.Targeting.Target)
+                    UnitStats enemyStats = enemyUnit.GetComponent<UnitStats>();
+        
+                    // Calculate and apply the reduced damage to the enemy
+                    float enemyReducedDamage = enemyStats.CalculateReducedDamage(baseDamage * damageMultiplier, targetStats.UnitMeleeResistance, isCriticalHit);
+                    if (enemyStats.UnitCurrentHealth <= enemyReducedDamage)
                     {
-                        UnitStats enemyStats = enemyUnit.GetComponent<UnitStats>();
-
-                        // Calculate and apply the reduced damage to the enemy
-                        float enemyReducedDamage = enemyStats.CalculateReducedMeleeDamage(baseDamage * damageMultiplier, isCriticalHit);
-                        enemyStats.UnitCurrentHealth -= enemyReducedDamage;
+                        AddDeadEnemyToCounter(unitState, enemyStats.SoStats);
                     }
+                    enemyStats.UnitCurrentHealth -= enemyReducedDamage;
+                    unitState.KillCounter.DamageDealt += enemyReducedDamage;
                 }
             }
         }
+        
     }
 
-
+    void AddDeadEnemyToCounter(UnitStateController unitState,SOUnitStats enemy)
+    {
+        Debug.Log("I Killed someone");
+        unitState.KillCounter.KillsList.Add(enemy);
+    }
     void DealDamageToObjective(UnitStateController unitState)
     {
         if (unitState.Targeting.DistanceToObj > unitState.UnitStats.UnitCloseRange) return;

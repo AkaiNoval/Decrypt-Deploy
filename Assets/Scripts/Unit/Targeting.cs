@@ -29,9 +29,21 @@ public class Targeting : MonoBehaviour
 
     [SerializeField] bool wasEnemy; // Flag to store the previous value of the isEnemy flag
 
-    public Unit Target { get { return target; } set { target = value; } }
+    public Unit Target { get { return target; } private set { target = value; } }
     public UnitObjective Objective { get => objectiveTarget; set => objectiveTarget = value; }
-    public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
+    public float DistanceToTarget { get => distanceToTarget; 
+        set
+        {
+            if (Target == null)
+            {
+                distanceToTarget = 0;
+            }
+            else
+            {
+                distanceToTarget = value;
+            }
+        }
+    }
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
 
@@ -84,56 +96,56 @@ public class Targeting : MonoBehaviour
                 return null;
         }
     }
-    private Unit GetClosestEnemy(Vector3 position, float maxRange)
+    Unit GetClosestEnemy(Vector3 position, float maxRange)
     {
         List<Unit> enemyList = _unit.IsEnemy ? UnitManager.AllyList : UnitManager.EnemyList;
         return FindClosestUnit(position, maxRange, enemyList);
     }
-    private Unit GetClosestAlly(Vector3 position, float maxRange)
+    Unit GetClosestAlly(Vector3 position, float maxRange)
     {
         List<Unit> allyList = _unit.IsEnemy ? UnitManager.EnemyList : UnitManager.AllyList;
         return FindClosestUnit(position, maxRange, allyList);
     }
-    private Unit GetClosestAndLowestHealthAlly(Vector3 position, float maxRange)
+    Unit GetClosestAndLowestHealthAlly(Vector3 position, float maxRange)
     {
         List<Unit> allyList = _unit.IsEnemy ? UnitManager.EnemyList : UnitManager.AllyList;
         return FindClosestAndLowestHealthUnit(position, maxRange, allyList);
     }
-    private Unit GetClosestAndLowestHealthEnemy(Vector3 position, float maxRange)
+    Unit GetClosestAndLowestHealthEnemy(Vector3 position, float maxRange)
     {
         List<Unit> enemyList = _unit.IsEnemy ? UnitManager.AllyList : UnitManager.EnemyList;
         return FindClosestAndLowestHealthUnit(position, maxRange, enemyList);
     }
-    private Unit GetClosestAndHighestHealthAlly(Vector3 position, float maxRange)
+    Unit GetClosestAndHighestHealthAlly(Vector3 position, float maxRange)
     {
         List<Unit> allyList = _unit.IsEnemy ? UnitManager.EnemyList : UnitManager.AllyList;
         return FindClosestAndHighestHealthUnit(position, maxRange, allyList);
     }
-    private Unit GetClosestAndHighestHealthEnemy(Vector3 position, float maxRange)
+    Unit GetClosestAndHighestHealthEnemy(Vector3 position, float maxRange)
     {
         List<Unit> enemyList = _unit.IsEnemy ? UnitManager.AllyList : UnitManager.EnemyList;
         return FindClosestAndHighestHealthUnit(position, maxRange, enemyList);
     }
-    private Unit GetClosestAttackerAlly(Vector3 position, float maxRange)
+    Unit GetClosestAttackerAlly(Vector3 position, float maxRange)
     {
         List<Unit> allyList = _unit.IsEnemy ? UnitManager.EnemyList : UnitManager.AllyList;
         List<Unit> attackerList = allyList.FindAll(u => u.GetComponent<UnitStats>().UnitClass == Class.Attacker);
         return FindClosestUnit(position, maxRange, attackerList);
     }
-    private Unit GetClosestAttackerEnemy(Vector3 position, float maxRange)
+    Unit GetClosestAttackerEnemy(Vector3 position, float maxRange)
     {
         List<Unit> enemyList = _unit.IsEnemy ? UnitManager.AllyList : UnitManager.EnemyList;
         List<Unit> attackerList = enemyList.FindAll(u => u.GetComponent<UnitStats>().UnitClass == Class.Attacker);
         return FindClosestUnit(position, maxRange, attackerList);
     }
-    private Unit FindClosestUnit(Vector3 position, float maxRange, List<Unit> unitList)
+    Unit FindClosestUnit(Vector3 position, float maxRange, List<Unit> unitList)
     {
         Unit closest = null;
         float closestDistance = float.MaxValue;
 
         foreach (Unit unit in unitList)
         {
-            if (unit == _unit || unit.IsDead())
+            if (unit == _unit || unit.IsDead() || !unit.enabled)
                 continue;
 
             float distance = Vector3.Distance(position, unit.GetPosition());
@@ -146,7 +158,7 @@ public class Targeting : MonoBehaviour
         }
         return closest;
     }
-    private Unit FindClosestAndLowestHealthUnit(Vector3 position, float maxRange, List<Unit> unitList)
+    Unit FindClosestAndLowestHealthUnit(Vector3 position, float maxRange, List<Unit> unitList)
     {
         Unit closestWithLowestHealth = null;
         float lowestHealth = float.MaxValue;
@@ -178,7 +190,7 @@ public class Targeting : MonoBehaviour
         }
         return closestWithLowestHealth;
     }
-    private Unit FindClosestAndHighestHealthUnit(Vector3 position, float maxRange, List<Unit> unitList)
+    Unit FindClosestAndHighestHealthUnit(Vector3 position, float maxRange, List<Unit> unitList)
     {
         Unit closestWithHighestHealth = null;
         float highestHealth = float.MinValue;

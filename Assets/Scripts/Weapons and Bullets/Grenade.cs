@@ -7,6 +7,7 @@ public class Grenade : MonoBehaviour
     public GameObject Explosion;
     public float Radius;
     public int DamageAmount;
+    public KillCounter killCounter;
     [SerializeField] bool drawGizmos;
 
     private void OnDestroy()
@@ -19,10 +20,11 @@ public class Grenade : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, Radius);
         foreach (Collider2D collider in colliders)
         {
-            UnitStats unitStats = collider.GetComponent<UnitStats>();
-            if (unitStats != null)
+            UnitStats unitstat = collider.GetComponent<UnitStats>();
+            if (unitstat != null)
             {
-                unitStats.TakeExplosionDamage(DamageAmount);
+                unitstat.CalculateReducedDamage(DamageAmount, unitstat.UnitExplosionResistance, false); //Explosion Damage wont never deal critical damage
+                killCounter.DamageDealt += DamageAmount;
             }
         }
     }

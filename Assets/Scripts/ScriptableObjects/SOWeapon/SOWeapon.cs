@@ -34,7 +34,7 @@ public class SOWeapon : ScriptableObject
     [Header("Melee Only")]
     public bool CanMultipleDamage;
     [Header("Range Only")]
-    public int Magazine;
+    public int MagazineCapacity;
     public bool EnableMultipleBullets;
     public int BulletPerShot;
     public float SpreadAngle;

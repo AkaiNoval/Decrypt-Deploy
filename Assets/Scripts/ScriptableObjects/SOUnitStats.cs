@@ -18,7 +18,7 @@ public class SOUnitStats : ScriptableObject
     public int Cost;//CanChange
     [Header("Health")]
     public float MaxHealth;//CanChange
-    public float HealingSpeed;//CanChange
+    public float HealingAmountPerSecond;//CanChange
     [Header("Basic")]
     public float Morale;
     public float Charisma;//Lock
