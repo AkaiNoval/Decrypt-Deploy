@@ -133,8 +133,6 @@ public class AnimationController : MonoBehaviour
         transform.rotation = targetRotation;
     }
 
-
-
     public bool ShouldReload() => magazine > 0 && bulletsRemaining <= 0;
 
     void CheckDefaultMagazine()
