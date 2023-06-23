@@ -6,10 +6,9 @@ public class Moving : IState
     AIPath path;
     AIDestinationSetter destinationSetter;
     float previousSpeed;
-    GameObject previousTransform;
+    Transform targetTransform = null;
     public void EnterState(UnitStateController unitState)
     {
-        Debug.Log("Enter State here");
         destinationSetter = unitState.GetComponent<AIDestinationSetter>();
         path = unitState.GetComponent<AIPath>();
         unitState.currentState = CurrentState.Moving;
@@ -19,9 +18,8 @@ public class Moving : IState
     }
     public void ExitState(UnitStateController unitState)
     {
-        Debug.Log("ExitState here");
+        Debug.Log("ExitState Moving");
         path.canMove = false;
-        Object.Destroy(previousTransform);
     }
     public void UpdateState(UnitStateController unitState)
     {
@@ -101,22 +99,19 @@ public class Moving : IState
     }
     void SetAndMoveToTarget(UnitStateController unitState)
     {
-        Transform targetTransform = null;
+  
         // Check if the objective should be the target
         if (GoToObjective(unitState))
         {
-            if (previousTransform != null) return;
-            // Get the Collider2D component from the objective target
-            Collider2D targetCollider = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.GetComponent<Collider2D>() : null;
-            if (targetCollider != null)
+            if (unitState.Targeting.Objective != null)
             {
-                // Generate a random position within the target collider bounds
-                Vector2 randomPosition = GetRandomPositionInCollider(targetCollider);
-
-                // Create a new GameObject and set its position to the random position
-                previousTransform = new GameObject();
-                targetTransform = previousTransform.transform;
-                targetTransform.position = randomPosition;
+                // Get the Collider2D component from the objective target
+                Collider2D targetCollider = unitState.Targeting.Objective != null ? unitState.Targeting.Objective.GetComponent<Collider2D>() : null;
+                if (targetCollider != null)
+                {
+                    // Create a new GameObject and set its position to the random position
+                    targetTransform = unitState.Targeting.Objective.transform;
+                }
             }
         }
         else
@@ -169,6 +164,8 @@ public class Moving : IState
             _ => false
         };
     }
+
+    
 
     #region Nothing here
     public void PhysicsUpdateState(UnitStateController unitState)

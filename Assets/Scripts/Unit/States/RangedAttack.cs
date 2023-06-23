@@ -71,7 +71,7 @@ public class RangedAttack : IState
 
             // Shoot at the objective
             Vector3 objectivePosition = unitState.Targeting.Objective.transform.position;
-            Vector2 directionToObjective = objectivePosition - unitState.bulletSpawnPoint.transform.position;
+            Vector2 directionToObjective = objectivePosition - unitState.animationController.bulletSpawnPoint.transform.position; 
 
             // Calculate the angle to point towards the objective
             float angleObj = Vector2.SignedAngle(Vector2.right, directionToObjective);
@@ -80,7 +80,7 @@ public class RangedAttack : IState
             Quaternion bulletRotationObj = Quaternion.AngleAxis(angleObj, Vector3.forward);
 
             // Spawn a bullet towards the objective
-            InstBullet(unitState, unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
+            InstBullet(unitState, unitState.animationController.bulletPrefab, unitState.animationController.bulletSpawnPoint, bulletRotationObj, unitState.UnitStats.UnitRangeDamage);
 
             return;
         }
@@ -102,7 +102,7 @@ public class RangedAttack : IState
         Vector3 targetCenter = targetCollider.bounds.center;
 
         // Calculate the direction to the target
-        Vector2 directionToTarget = targetCenter - unitState.bulletSpawnPoint.transform.position;
+        Vector2 directionToTarget = targetCenter - unitState.animationController.bulletSpawnPoint.transform.position;
  
         // Calculate the angle to point towards the target
         //float angleTarget = Vector3.Angle(Vector3.right, directionToTarget);
@@ -112,7 +112,7 @@ public class RangedAttack : IState
         Quaternion bulletRotationTarget = Quaternion.AngleAxis(angleTarget, Vector3.forward);
 
         // Spawn a bullet towards the target
-        InstBullet(unitState, unitState.bulletPrefab, unitState.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
+        InstBullet(unitState, unitState.animationController.bulletPrefab, unitState.animationController.bulletSpawnPoint, bulletRotationTarget, unitState.UnitStats.UnitRangeDamage);
     }
 
     void InstBullet(UnitStateController unitState, GameObject bulletPrefab, GameObject bulletSpawnPoint, Quaternion rotation, float rangedDamage)

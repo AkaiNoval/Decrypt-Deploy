@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class AnimationController : MonoBehaviour
 {
@@ -12,7 +15,9 @@ public class AnimationController : MonoBehaviour
     [SerializeField] bool isDeathAnimationTriggered;
     [SerializeField] int magazine;
     [SerializeField] int bulletsRemaining;
-
+    [Header("Options")]
+    public GameObject bulletSpawnPoint;
+    public GameObject bulletPrefab;
 
     private void Start()
     {
@@ -22,11 +27,12 @@ public class AnimationController : MonoBehaviour
     }
     void Update()
     {
-        // Check if the animator controller needs to be switched
         if (unitStats.Weapon == null) return;
         CheckDefaultMagazine();
         SwitchAnimatorController();
         SwitchAnimationClip();
+        
+        RotateUnit();
     }
     void SetAnimatorController()
     {
@@ -91,6 +97,43 @@ public class AnimationController : MonoBehaviour
                 break;
         }
     }
+    void RotateUnit()
+    {
+        if (unitStats.UnitCurrentHealth <= 0) return;
+        Targeting target = stateController.Targeting;
+        Quaternion targetRotation;
+
+        if (stateController.unit.IsEnemy)
+        {
+            if (target.Target != null && target.Target.transform.position.x > transform.position.x && target.DistanceToTarget < target.DistanceToObj)
+            {
+                // Target is on the right, rotate to face right
+                targetRotation = Quaternion.Euler(0, 0, 0);
+            }
+            else
+            {
+                // Target is on the left or no target, rotate to face left
+                targetRotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
+        else
+        {
+            if (target.Target != null && target.Target.transform.position.x < transform.position.x && target.DistanceToTarget < target.DistanceToObj)
+            {
+                // Target is on the left, rotate to face left
+                targetRotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                // Target is on the right or no target, rotate to face right
+                targetRotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+
+        transform.rotation = targetRotation;
+    }
+
+
 
     public bool ShouldReload() => magazine > 0 && bulletsRemaining <= 0;
 

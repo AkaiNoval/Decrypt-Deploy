@@ -37,9 +37,6 @@ public class UnitStateController : MonoBehaviour
     public Support StateSupport = new Support();
     public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
     public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
-    [Header("Options")]
-    public GameObject bulletSpawnPoint;
-    public GameObject bulletPrefab;
     public Targeting Targeting { get ; set; }
     public UnitStats UnitStats { get; set; }
     public KillCounter KillCounter;
@@ -69,6 +66,7 @@ public class UnitStateController : MonoBehaviour
     }
     void Update()
     {
+        if (Targeting.Objective == null) return;
         if (UnitStats.IsDead())
         {
             currentState = CurrentState.Death;
@@ -82,7 +80,6 @@ public class UnitStateController : MonoBehaviour
             UnitStats.PassiveAbility.StartTimer(this);
         }
         state.UpdateState(this);
-
     }
     void FixedUpdate()
     {
@@ -95,8 +92,19 @@ public class UnitStateController : MonoBehaviour
     public void SwitchState(IState newState)
     {
         if (state == newState) return;
-        SwitchStateInterfere();
-        StartCoroutine(DelayedStateSwitch(newState));
+        if (!SwitchStateInterfere())
+        {
+            StartCoroutine(DelayedStateSwitch(newState));
+        }
+    }
+    bool SwitchStateInterfere()
+    {
+        if (animationController.ShouldReload())
+        {
+            Debug.Log("Stop changing");
+            return true;
+        }
+        return false;
     }
     IEnumerator DelayedStateSwitch(IState newState)
     {
@@ -162,10 +170,7 @@ public class UnitStateController : MonoBehaviour
         }
     }
 
-    void SwitchStateInterfere()
-    {
-        if (animationController.ShouldReload()) { return; }
-    }
+  
     #region AnimationEvent keyframe
 
 

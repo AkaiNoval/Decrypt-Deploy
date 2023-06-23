@@ -46,13 +46,14 @@ public class Targeting : MonoBehaviour
     }
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
+    public bool WasEnemy { get => wasEnemy; private set =>  wasEnemy = value; }
 
     private void Awake()
     {
         _unit = GetComponent<Unit>();
         unitStats = GetComponent<UnitStats>();
         objTargets = FindObjectsOfType<UnitObjective>();
-        wasEnemy = _unit.IsEnemy;
+        WasEnemy = _unit.IsEnemy;
         GetObjective();
         CalcDist();
     }
@@ -62,12 +63,11 @@ public class Targeting : MonoBehaviour
         // Update the current target by finding the closest unit within range
         Target = GetClosestUnit(_unit.GetPosition(), range); // Store the previous value of IsEnemy
         // Check if the value of IsEnemy has changed
-        if (_unit.IsEnemy != wasEnemy)
+        if (_unit.IsEnemy != WasEnemy)
         {
             GetObjective(); // Update the objective
         }
         CalcDist(); // Calculate distances
-        RotateUnit();
     }
 
 
@@ -228,37 +228,6 @@ public class Targeting : MonoBehaviour
 
         return closestWithHighestHealth;
     }
-
-    private void RotateUnit()
-    {
-        if (_unit.IsEnemy)
-        {
-            if (Target != null && Target.transform.position.x > transform.position.x)
-            {
-                // Target is on the right, rotate to face right
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else
-            {
-                // Target is on the left or no target, rotate to face left
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-        }
-        else
-        {
-            if (Target != null && Target.transform.position.x < transform.position.x)
-            {
-                // Target is on the left, rotate to face left
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else
-            {
-                // Target is on the right or no target, rotate to face right
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-
-    }
     public float DistanceBetweenUnitAndTarget()
     {
         if (Target == null) return 0f;
@@ -277,7 +246,7 @@ public class Targeting : MonoBehaviour
                 break; // Exit the loop once a suitable unitObjective is found
             }
         }
-        wasEnemy = _unit.IsEnemy;
+        WasEnemy = _unit.IsEnemy;
     }
     private void CalcDist()
     {

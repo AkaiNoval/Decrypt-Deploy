@@ -34,16 +34,19 @@ public class Idle : IState
                     if (distanceToObj > closeRange && distanceToObj > farRange)
                     {
                         // If there is no target and the distance to object is beyond both ranges, switch to moving state
+                        Debug.Log("1");
                         unitState.SwitchState(unitState.StateMoving);
                     }
                     else if (distanceToObj > closeRange && distanceToObj <= farRange)
                     {
                         // If there is no target and the distance to object is within the far range, switch to range attack state
+                        Debug.Log("2");
                         unitState.SwitchState(unitState.StateRangeAttack);
                     }
                     else if (distanceToObj <= closeRange)
                     {
                         // If there is no target and the distance to object is within the close range, switch to melee attack state
+                        Debug.Log("3");
                         unitState.SwitchState(unitState.StateMeleeAttack);
                     }
                     // No target, return
