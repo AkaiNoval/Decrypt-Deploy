@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: ThrowFragGrenade
   m_EditorClassIdentifier: 
   Throwable: {fileID: 5038214668817029584, guid: c96526d5265c7e04789f511c07999444, type: 3}
-  UpwardModifier: 7
-  VelocityModifier: 5
+  UpwardModifier: 10
+  VelocityModifier: 7
+  RotationSpeed: 360
+  LifeTime: 2.1

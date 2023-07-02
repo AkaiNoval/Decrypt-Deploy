@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PassiveAbilityName: Emergency First Aid
   PassiveAbilityDescription: 
-  triggerInterval: 1
+  triggerInterval: 60
   type: 0
-  HealingAmount: 10
+  HealingAmount: 20
   PercentageHealingAmount: 0
   HealthBoostAmount: 0
   HealthBoostDuration: 0
