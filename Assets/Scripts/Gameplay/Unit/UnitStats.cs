@@ -126,7 +126,7 @@ public class UnitStats : MonoBehaviour
         unitID = SoStats.ID;
         //Properties
         UnitClass = SoStats.Class;
-        UnitCost = SoStats.Cost;
+        UnitCost = SoStats.Clonite;
         UnitPreparationTime = SoStats.PreparationTime;
         UnitMaxHealth = SoStats.MaxHealth;
         UnitCurrentHealth = UnitMaxHealth;
@@ -226,7 +226,7 @@ public class UnitStats : MonoBehaviour
 
 
     #region TakeExplosionDamage
-    public void TakeExplosionDamage(float damage)
+    public void TakeExplosionDamage(float damage, float resistanceType)
     {
         float effectiveDamage = damage * (1f - unitExplosionResistance / 100f);
         UnitCurrentHealth -= effectiveDamage;

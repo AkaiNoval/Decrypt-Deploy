@@ -48,6 +48,15 @@ public class Bullet : MonoBehaviour
             KillCounter.DamageDealt += reducedDamage;
             Destroy(gameObject);
         }
+        if(collision.TryGetComponent(out UnitObjective objective))
+        {
+            if (IsEnemyBullet != objective.IsEnemy)
+            {
+                objective.ObjectiveCurrentHealth -= bulletDamage;
+                Destroy(gameObject);
+            }
+            
+        }
     }
 
     void AddDeadEnemyToCounter(SOUnitStats enemy)

@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+
 
 public class AnimationController : MonoBehaviour
 {
@@ -11,7 +7,7 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private UnitStats unitStats;
     [SerializeField] private UnitStateController stateController;
     RuntimeAnimatorController previousRAC;
-    [SerializeField] CurrentState previouseState;
+    //[SerializeField] CurrentState previouseState;
     [SerializeField] bool isDeathAnimationTriggered;
     [SerializeField] int magazine;
     [SerializeField] int bulletsRemaining;
@@ -60,8 +56,8 @@ public class AnimationController : MonoBehaviour
             animator.SetTrigger("Death");
             return;
         }
-        if (previouseState == stateController.currentState) return;
-        previouseState = stateController.currentState;
+        //if (previouseState == stateController.currentState) return;
+        //previouseState = stateController.currentState;
         SwitchAnimationDuringRunTime();
     }
     void SwitchAnimationDuringRunTime()
@@ -173,10 +169,10 @@ public class AnimationController : MonoBehaviour
     }
     public void TriggerReloading()
     {
-        bulletsRemaining = magazine;
         //Go Back to Idle after finishing reloading to cycle the state one again
         animator.SetTrigger("Idle");
-        previouseState = CurrentState.Idle;
+        //previouseState = CurrentState.Idle;
+        bulletsRemaining = magazine;
     }
 
 

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf71ef6df971ca4da3e9da2ff3f6df8, type: 3}
   m_Name: Standard Sidearm
   m_EditorClassIdentifier: 
-  WeaponSprite: {fileID: 4090386550594248903, guid: abeab81a5673ced428754a67d26bdd17, type: 3}
+  WeaponImage: {fileID: 21300000, guid: 477db02607867fd4fa8582241a4932b7, type: 3}
   runtimeAnimController: {fileID: 9100000, guid: e7f83a49f8c97d040b1ad50f85799a79, type: 2}
   WeaponType: 1
+  ScrapCost: 10
   CloseRange: 3
-  FarRange: 10
+  FarRange: 30
   unitCriticalChance: 20
   unitCriticalDamage: 20
   DodgeChance: 0

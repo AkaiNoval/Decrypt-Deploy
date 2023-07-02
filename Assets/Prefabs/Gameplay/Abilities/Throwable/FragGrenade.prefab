@@ -139,4 +139,8 @@ MonoBehaviour:
   Explosion: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
   Radius: 3
   DamageAmount: 100
+  killCounter: {fileID: 0}
   drawGizmos: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64

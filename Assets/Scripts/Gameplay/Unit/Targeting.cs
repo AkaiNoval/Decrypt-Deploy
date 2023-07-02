@@ -22,7 +22,7 @@ public class Targeting : MonoBehaviour
     [SerializeField] Unit target;// The current target
     [SerializeField] UnitObjective objectiveTarget;
     UnitObjective[] objTargets;
-    [SerializeField] float range = 10f;  // The maximum range for selecting a target, if there are no targets in this radius => NULL
+    [SerializeField] float range;  // The maximum range for selecting a target, if there are no targets in this radius => NULL
     [SerializeField] float distanceToTarget;
     [SerializeField] float distanceToObjective;
     [SerializeField] float distanceBetweenTargetAndObject;
@@ -47,6 +47,7 @@ public class Targeting : MonoBehaviour
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
     public bool WasEnemy { get => wasEnemy; private set =>  wasEnemy = value; }
+    public float Range { get => range; set => range = Mathf.Clamp(value, 10f, unitStats.UnitFarRange); }
 
     private void Awake()
     {
@@ -57,11 +58,15 @@ public class Targeting : MonoBehaviour
         GetObjective();
         CalcDist();
     }
+    private void Start()
+    {
+        Range = unitStats.UnitFarRange;
+    }
     private void Update()
     {
         if (unitStats.IsDead()) return;
         // Update the current target by finding the closest unit within range
-        Target = GetClosestUnit(_unit.GetPosition(), range); // Store the previous value of IsEnemy
+        Target = GetClosestUnit(_unit.GetPosition(), Range); // Store the previous value of IsEnemy
         // Check if the value of IsEnemy has changed
         if (_unit.IsEnemy != WasEnemy)
         {

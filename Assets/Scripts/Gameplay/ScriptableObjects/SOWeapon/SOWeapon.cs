@@ -10,9 +10,10 @@ public enum WeaponType
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
 {
-    public Sprite WeaponSprite;
+    public Sprite WeaponImage;
     public RuntimeAnimatorController runtimeAnimController;
     public WeaponType WeaponType;
+    public int ScrapCost;
     [Header("Range")]
     public float CloseRange;
     public float FarRange;
