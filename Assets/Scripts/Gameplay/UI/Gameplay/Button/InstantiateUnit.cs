@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class InstantiateUnit : MonoBehaviour
 {
+    public SOUnitStats unitStats;
     [SerializeField] SOWeapon unitWeapon;
-    [SerializeField] List<GameObject> Units= new List<GameObject>();
-    [SerializeField] SOUnitStats unitStats;
+    [SerializeField] PreparationButton preparationButton;
+    [SerializeField] PopUpWindow popUpWindow;
+    [SerializeField] List<GameObject> Units= new List<GameObject>();  
     [SerializeField] int slot;
     [SerializeField] GameObject spawnPosition;
     [SerializeField] float minY;
@@ -19,19 +21,31 @@ public class InstantiateUnit : MonoBehaviour
     }
     public void SpawnUnit()
     {
+        if (unitStats == null) return;
         unitWeapon = GetComponentInChildren<WeaponButton>().weapon;
-        Debug.Log("Start Spawning Unit");   
-        float randomY = Random.Range(minY, maxY);
-        Vector3 spawnPos = new Vector3(spawnPosition.transform.position.x, randomY, spawnPosition.transform.position.z);
-        foreach (var unit in Units)
-        {     
-            if(unit.TryGetComponent(out UnitStats unitStats) == unitStats)
+        
+        if (CurrencyManager.Instance.PlayerClonite >= unitStats.Clonite && CurrencyManager.Instance.PlayerScrap >= unitWeapon.ScrapCost)
+        {
+            float randomY = Random.Range(minY, maxY);
+            Vector3 spawnPos = new Vector3(spawnPosition.transform.position.x, randomY, spawnPosition.transform.position.z);
+            foreach (var unit in Units)
             {
-                var spawnedUnit = Instantiate(unit, spawnPos, Quaternion.identity);
-                spawnedUnit.GetComponent<UnitStats>().Weapon = unitWeapon;
-                Debug.Log("Spawned " + spawnedUnit + " with " + unitWeapon);
+                if (unit.TryGetComponent(out UnitStats unitStats) == unitStats)
+                {
+                    var spawnedUnit = Instantiate(unit, spawnPos, Quaternion.identity);
+                    spawnedUnit.GetComponent<UnitStats>().Weapon = unitWeapon;
+                    Debug.Log("Spawned " + spawnedUnit + " with " + unitWeapon);
+                }
             }
+            CurrencyManager.Instance.PlayerClonite -= unitStats.Clonite;
+            CurrencyManager.Instance.PlayerScrap -= unitWeapon.ScrapCost;
+            preparationButton.RestartPreparationTime();
         }
+        else
+        {
+            popUpWindow.ShowPopup("Unable to clone due to a shortage of necessary materials.");
+        }
+
     }
     public void GetWeapon(SOWeapon Weapon)
     {

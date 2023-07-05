@@ -92,19 +92,7 @@ public class UnitStateController : MonoBehaviour
     public void SwitchState(IState newState)
     {
         if (state == newState) return;
-        if (!SwitchStateInterfere())
-        {
-            StartCoroutine(DelayedStateSwitch(newState));
-        }
-    }
-    bool SwitchStateInterfere()
-    {
-        if (animationController.ShouldReload())
-        {
-            Debug.Log("Stop changing");
-            return true;
-        }
-        return false;
+        StartCoroutine(DelayedStateSwitch(newState));
     }
     IEnumerator DelayedStateSwitch(IState newState)
     {

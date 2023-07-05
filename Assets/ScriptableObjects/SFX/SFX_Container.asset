@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6d4112edf81cb44c802c79970da4103, type: 3}
+  m_Name: SFX_Container
+  m_EditorClassIdentifier: 
+  HurtSFXClip:
+  - {fileID: 8300000, guid: 0102b42176ac0ca4c94fd28c803b30df, type: 3}
+  - {fileID: 8300000, guid: 2190d47b983bdcd4db612475333b0821, type: 3}
+  - {fileID: 8300000, guid: 37c8c3356f04bfb40ae9ab1def9ce7fc, type: 3}
+  - {fileID: 8300000, guid: 483718eb4c7ac69468f86e00e37cdb28, type: 3}
+  - {fileID: 8300000, guid: 039ae745d4d1a0340a45fff61cee7c1b, type: 3}
+  - {fileID: 8300000, guid: bb20f5aa4c0ec044c883c991e3b02a81, type: 3}
+  PistolSFXClip:
+  - {fileID: 8300000, guid: c11e57cea142f2e43a1c78920b0bc318, type: 3}
+  - {fileID: 8300000, guid: 8e8458c3bfbf2e04c8b4e72ba7bd11ee, type: 3}
+  CarbineSFXClip: []
+  ObjectiveSFXClip: []
+  DeathSFXClip: []
+  GunReloadingSFXClip:
+  - {fileID: 8300000, guid: 29fa98934bdd35e42848cc8277099631, type: 3}
