@@ -1912,7 +1912,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 2.9166667
+  - time: 2.8833334
+    functionName: PlaySidearmSFX
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.9
     functionName: TriggerRangeAttack
     data: 
     objectReferenceParameter: {fileID: 0}

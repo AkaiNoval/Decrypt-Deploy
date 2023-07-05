@@ -56,8 +56,6 @@ public class AnimationController : MonoBehaviour
             animator.SetTrigger("Death");
             return;
         }
-        //if (previouseState == stateController.currentState) return;
-        //previouseState = stateController.currentState;
         SwitchAnimationDuringRunTime();
     }
     void SwitchAnimationDuringRunTime()

@@ -3,8 +3,13 @@ guid: 9d116d4ce5dbcc648bfda6891cb611c1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
+  defaultReferences:
+  - unitStats: {instanceID: 0}
+  - unitWeapon: {instanceID: 0}
+  - preparationButton: {instanceID: 0}
+  - unaffordablieNotification: {fileID: 1820540339624844770, guid: b43159d3798eb6348ab9c9bdf197302d, type: 3}
+  - spawnPosition: {instanceID: 0}
+  executionOrder: 200
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

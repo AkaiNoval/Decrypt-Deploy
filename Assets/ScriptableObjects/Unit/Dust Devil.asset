@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d80255f2bd8d54f9fe1f7aa00c420c, type: 3}
+  m_Name: Dust Devil
+  m_EditorClassIdentifier: 
+  Name: Dust Devil
+  ID: D.D.
+  Portrait: {fileID: 0}
+  Description: 
+  Class: 0
+  PreparationTime: 5
+  Clonite: 5
+  MaxHealth: 100
+  HealingAmountPerSecond: 0.1
+  Morale: 50
+  Charisma: 30
+  Speed: 1
+  Agility: 50
+  DodgeChance: 20
+  CloseRange: 1
+  FarRange: 0
+  Accuracy: 30
+  CriticalChance: 0
+  CriticalDamage: 0
+  MeleeDamage: 0
+  RangeDamage: 0
+  PoisonDamage: 0
+  FireDamage: 0
+  CryoDamage: 0
+  ElectrifiedDamage: 0
+  ExplosionDamage: 0
+  BulletResistance: 0
+  MeleeResistance: 0
+  PoisonResistance: 30
+  FireResistance: 0
+  CryoResistance: 0
+  ElectrifiedResistance: 0
+  ExplosionResistance: 0

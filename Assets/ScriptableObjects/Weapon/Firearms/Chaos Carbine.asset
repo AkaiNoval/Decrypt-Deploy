@@ -15,16 +15,16 @@ MonoBehaviour:
   WeaponImage: {fileID: 0}
   runtimeAnimController: {fileID: 9100000, guid: 9f2f8a4836c6fd746b928fee27fa9183, type: 2}
   WeaponType: 1
-  ScrapCost: 30
+  ScrapCost: 50
   CloseRange: 3
-  FarRange: 40
+  FarRange: 35
   unitCriticalChance: 10
   unitCriticalDamage: 50
   DodgeChance: 0
   Speed: 0
   Accuracy: 0
   unitMeleeDamage: 3
-  unitRangeDamage: 15
+  unitRangeDamage: 5
   unitPoisonDamage: 0
   unitFireDamage: 0
   unitCryoDamage: 0

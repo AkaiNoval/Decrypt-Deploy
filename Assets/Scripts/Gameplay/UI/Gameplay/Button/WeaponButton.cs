@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using TMPro;
 
-public class WeaponButton : MonoBehaviour, ISelectHandler, IDeselectHandler
+public class WeaponButton : MonoBehaviour, ISelectHandler
 {
     public static Action<WeaponButton> onSelected;
     public SOWeapon weapon;
     public Sprite unitWeaponImage;
-    [SerializeField] bool isSelected;
     [SerializeField] GameObject buttonImage;
+    [SerializeField] TMP_Text weaponScrapCost;
     Sprite previousWeaponImage;
     private void Start()
     {
@@ -23,17 +24,12 @@ public class WeaponButton : MonoBehaviour, ISelectHandler, IDeselectHandler
         {
             previousWeaponImage = unitWeaponImage;
             buttonImage.GetComponent<Image>().sprite = unitWeaponImage;
+            weaponScrapCost.text = weapon.ScrapCost.ToString();
         }
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        isSelected=true;
         onSelected?.Invoke(this);
-    }
-
-    public void OnDeselect(BaseEventData eventData)
-    {
-        isSelected=false;
     }
 }

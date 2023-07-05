@@ -34,7 +34,6 @@ public class Idle : IState
                     if (distanceToObj > closeRange && distanceToObj > farRange)
                     {
                         // If there is no target and the distance to object is beyond both ranges, switch to moving state
-                        Debug.Log("1");
                         unitState.SwitchState(unitState.StateMoving);
                     }
                     else if (distanceToObj > closeRange && distanceToObj <= farRange)

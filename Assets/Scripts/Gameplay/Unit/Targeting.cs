@@ -47,7 +47,7 @@ public class Targeting : MonoBehaviour
     public float DistanceToObj { get => distanceToObjective; set => distanceToObjective = value; }
     public float DistBetweenTargetAndObject { get => distanceBetweenTargetAndObject; set => distanceBetweenTargetAndObject = value; }
     public bool WasEnemy { get => wasEnemy; private set =>  wasEnemy = value; }
-    public float Range { get => range; set => range = Mathf.Clamp(value, 10f, unitStats.UnitFarRange); }
+    public float Range { get => range; set => range = Mathf.Clamp(value, 10f, unitStats.Weapon.FarRange); }
 
     private void Awake()
     {
@@ -60,7 +60,7 @@ public class Targeting : MonoBehaviour
     }
     private void Start()
     {
-        Range = unitStats.UnitFarRange;
+        Range = unitStats.Weapon.FarRange;
     }
     private void Update()
     {

@@ -23,6 +23,7 @@ public class PurchaseWeapon : MonoBehaviour
     }
     public void UpdateImageAndWeapon() 
     {
+        if (thisButtonWeapon == null) return;
         thisButtonWeapon.weapon = weapon;
         thisButtonWeapon.unitWeaponImage = weaponImage;
     }

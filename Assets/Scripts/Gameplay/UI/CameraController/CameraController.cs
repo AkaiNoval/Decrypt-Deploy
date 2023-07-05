@@ -47,7 +47,7 @@ public class CameraController : MonoBehaviour
             Touch secondTouch = Input.GetTouch(1);
 
             Vector2 firstTouchPrevPos = firstTouch.position - firstTouch.deltaPosition;
-            Vector2 secondTouchPrevPos = secondTouch.position - firstTouch.deltaPosition;
+            Vector2 secondTouchPrevPos = secondTouch.position - secondTouch.deltaPosition;
 
             float prevMagnitude = (firstTouchPrevPos - secondTouchPrevPos).magnitude;
             float currentMagnitude = (firstTouch.position - secondTouch.position).magnitude;

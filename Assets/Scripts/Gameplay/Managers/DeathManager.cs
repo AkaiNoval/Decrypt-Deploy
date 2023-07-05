@@ -60,6 +60,7 @@ public class DeathManager : MonoBehaviour
         else
         {
             EnemyDeathList.Add(unit);
+            CurrencyManager.Instance.PlayerScrap += 5;
         }
     }
 }

@@ -56,10 +56,18 @@ public class UnitStats : MonoBehaviour
     [SerializeField] float unitElectrifiedResistance;
     [SerializeField] float unitExplosionResistance;
 
+
+    [SerializeField] Animator animator;
     #region Properties
     public SOUnitStats SoStats { get => soStats; private set => soStats = value; }
     public float UnitMaxHealth { get => maxHealth; set => maxHealth = value; }
-    public float UnitCurrentHealth { get => currentHealth; set => currentHealth = Mathf.Clamp(value, 0, maxHealth); }
+    public float UnitCurrentHealth { get => currentHealth; 
+        set 
+        { 
+            
+            currentHealth = Mathf.Clamp(value, 0, maxHealth); 
+        } 
+    }
     public float HealingAmountPerSecond { get => healingAmountPerSecond; set => healingAmountPerSecond = value; }
     public float UnitMorale { get => unitMorale; set => unitMorale = value; }
     public float UnitPreparationTime { get => preparationTime; set => preparationTime = value; }
@@ -186,6 +194,7 @@ public class UnitStats : MonoBehaviour
     {
         if (IsDead() && !wasDead)
         {
+            Destroy(gameObject, 10f);
             wasDead= true;
             Collider2D collider2D = gameObject.GetComponent<Collider2D>();
             collider2D.enabled = false;
@@ -220,6 +229,7 @@ public class UnitStats : MonoBehaviour
             //CriticalDamageTextPopUp
             Debug.Log("isCritical");
         }
+        animator.SetTrigger("HitEffect");
         return Mathf.RoundToInt(reducedDamage);
     }
     #endregion

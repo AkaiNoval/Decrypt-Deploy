@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PassiveAbilityName: 
   PassiveAbilityDescription: 
-  triggerInterval: 5
+  triggerInterval: 60
   type: 3
   HealingAmount: 0
   PercentageHealingAmount: 0
-  HealthBoostAmount: 0
-  HealthBoostDuration: 0
+  HealthBoostAmount: 10
+  HealthBoostDuration: 10

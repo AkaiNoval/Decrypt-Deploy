@@ -35,27 +35,29 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        UnitStats unitStats = collision.GetComponent<UnitStats>();
-        if (IsEnemyBullet != collision.GetComponent<Unit>().IsEnemy)
-        {
-            float enemyBulletResistance = unitStats.UnitBulletResistance;
-            float reducedDamage = unitStats.CalculateReducedDamage(BulletDamage, enemyBulletResistance, IsCritical);
-            if (unitStats.UnitCurrentHealth <= reducedDamage)
-            {
-                AddDeadEnemyToCounter(unitStats.SoStats);
-            }
-            unitStats.UnitCurrentHealth -= reducedDamage;
-            KillCounter.DamageDealt += reducedDamage;
-            Destroy(gameObject);
-        }
-        if(collision.TryGetComponent(out UnitObjective objective))
+        if (collision.TryGetComponent(out UnitObjective objective))
         {
             if (IsEnemyBullet != objective.IsEnemy)
             {
                 objective.ObjectiveCurrentHealth -= bulletDamage;
                 Destroy(gameObject);
             }
-            
+
+        }
+        if(collision.TryGetComponent(out UnitStats unitStats))
+        {
+            if (IsEnemyBullet != collision.GetComponent<Unit>().IsEnemy)
+            {
+                float enemyBulletResistance = unitStats.UnitBulletResistance;
+                float reducedDamage = unitStats.CalculateReducedDamage(BulletDamage, enemyBulletResistance, IsCritical);
+                if (unitStats.UnitCurrentHealth <= reducedDamage)
+                {
+                    AddDeadEnemyToCounter(unitStats.SoStats);
+                }
+                unitStats.UnitCurrentHealth -= reducedDamage;
+                KillCounter.DamageDealt += reducedDamage;
+                Destroy(gameObject);
+            }
         }
     }
 
