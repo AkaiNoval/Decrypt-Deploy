@@ -49,6 +49,7 @@ The targeting system of each unit in the game is dynamic and adaptable. Here are
 By utilizing these different targeting options, units can dynamically select their targets based on specific criteria, such as proximity, health status, or the role of the target (enemy or ally). This flexible targeting system allows for strategic decision-making and adaptability during battles.
   
 ### **State pattern**
+![State1](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/cfc89f0f-8960-444d-bb74-65570d1f148f)
     public CurrentState currentState;
 
     public Idle StateIdle = new Idle();
