@@ -22,7 +22,8 @@ MonoBehaviour:
   PistolSFXClip:
   - {fileID: 8300000, guid: c11e57cea142f2e43a1c78920b0bc318, type: 3}
   - {fileID: 8300000, guid: 8e8458c3bfbf2e04c8b4e72ba7bd11ee, type: 3}
-  CarbineSFXClip: []
+  CarbineSFXClip:
+  - {fileID: 8300000, guid: 6234373dfab511c468de037138e3afd7, type: 3}
   ObjectiveSFXClip: []
   DeathSFXClip: []
   GunReloadingSFXClip:

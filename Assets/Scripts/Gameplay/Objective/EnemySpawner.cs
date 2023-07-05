@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject enemy;
+    [SerializeField] List<GameObject> enemies = new List<GameObject>();
     [SerializeField] GameObject spawnPos;
 
     [SerializeField] int spawnAmount;
@@ -58,7 +59,8 @@ public class EnemySpawner : MonoBehaviour
             isCoroutineRunning=true;
             Vector3 randomPos = new Vector3(spawnPos.transform.position.x, RandomeSpawnValue(minSpawnYRange, maxSpawnYRange), spawnPos.transform.position.z);
             yield return new WaitForSeconds(RandomeSpawnValue(minSpawnInterval, maxSpawnInterval));
-            Instantiate(enemy, randomPos, Quaternion.identity);
+            int enemyIndex = Random.Range(0, enemies.Count);
+            Instantiate(enemies[enemyIndex], randomPos, Quaternion.identity);
             currentAmount++;
             isCoroutineRunning = false;
         }

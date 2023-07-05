@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -47,6 +49,7 @@ ScriptedImporter:
     flipbookRows: 0
     flipbookColumns: 0
     ignorePngGamma: 0
+    cookieMode: 0
     filterMode: 1
     aniso: 1
     mipBias: 0
@@ -87,8 +90,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
   - name: R_UpperArm
@@ -427,8 +430,8 @@ ScriptedImporter:
     - {x: 25, y: 26}
     - {x: 26, y: 27}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -473, y: -355}
+    uvTransform: {x: 312, y: 185}
+    spritePosition: {x: 785, y: 540}
   - name: R_LowerArm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -732,8 +735,8 @@ ScriptedImporter:
     - {x: 22, y: 23}
     - {x: 23, y: 24}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -473, y: 557}
+    uvTransform: {x: 312, y: 1028}
+    spritePosition: {x: 785, y: 471}
   - name: R_Hand
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1048,8 +1051,8 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -783, y: 620}
+    uvTransform: {x: 4, y: 1028}
+    spritePosition: {x: 787, y: 408}
   - name: Weapon
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1399,8 +1402,8 @@ ScriptedImporter:
     - {x: 27, y: 28}
     - {x: 28, y: 29}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -4, y: -337}
+    uvTransform: {x: 682, y: 4}
+    spritePosition: {x: 686, y: 341}
   - name: Hair
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1792,8 +1795,8 @@ ScriptedImporter:
     - {x: 30, y: 31}
     - {x: 31, y: 32}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -863, y: -37}
+    uvTransform: {x: 4, y: 776}
+    spritePosition: {x: 867, y: 813}
   - name: Eyes
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2284,8 +2287,8 @@ ScriptedImporter:
     - {x: 39, y: 40}
     - {x: 40, y: 41}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1004, y: 1104}
+    uvTransform: {x: 4, y: 1957}
+    spritePosition: {x: 1008, y: 853}
   - name: Accessory
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2633,8 +2636,8 @@ ScriptedImporter:
     - {x: 26, y: 27}
     - {x: 27, y: 28}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -574, y: -314}
+    uvTransform: {x: 312, y: 412}
+    spritePosition: {x: 886, y: 726}
   - name: Mouth
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3565,8 +3568,8 @@ ScriptedImporter:
     - {x: 79, y: 80}
     - {x: 80, y: 81}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -856, y: 515}
+    uvTransform: {x: 178, y: 1269}
+    spritePosition: {x: 1034, y: 754}
   - name: Head
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3936,8 +3939,8 @@ ScriptedImporter:
     - {x: 28, y: 29}
     - {x: 29, y: 30}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -881, y: -262}
+    uvTransform: {x: 4, y: 462}
+    spritePosition: {x: 885, y: 724}
   - name: Torso
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -4285,8 +4288,8 @@ ScriptedImporter:
     - {x: 26, y: 27}
     - {x: 27, y: 28}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -877, y: -367}
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 881, y: 371}
   - name: R_UpperLeg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -4678,8 +4681,8 @@ ScriptedImporter:
     - {x: 30, y: 31}
     - {x: 31, y: 32}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -903, y: 1087}
+    uvTransform: {x: 4, y: 1269}
+    spritePosition: {x: 907, y: 182}
   - name: R_LowerLeg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -5016,8 +5019,8 @@ ScriptedImporter:
     - {x: 25, y: 26}
     - {x: 26, y: 27}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -604, y: 731}
+    uvTransform: {x: 312, y: 780}
+    spritePosition: {x: 916, y: 49}
   - name: R_Foot
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -5332,8 +5335,8 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -595, y: 1188}
+    uvTransform: {x: 312, y: 1188}
+    spritePosition: {x: 907, y: 0}
   - name: L_UpperLeg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -5703,8 +5706,8 @@ ScriptedImporter:
     - {x: 28, y: 29}
     - {x: 29, y: 30}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1019, y: 1435}
+    uvTransform: {x: 4, y: 1619}
+    spritePosition: {x: 1023, y: 184}
   - name: L_LowerLeg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -6030,8 +6033,8 @@ ScriptedImporter:
     - {x: 24, y: 25}
     - {x: 25, y: 26}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -530, y: 118}
+    uvTransform: {x: 532, y: 185}
+    spritePosition: {x: 1062, y: 67}
   - name: L_Foot
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -6346,8 +6349,8 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -746, y: 1308}
+    uvTransform: {x: 312, y: 1315}
+    spritePosition: {x: 1058, y: 7}
   - name: L_UpperArm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -6695,8 +6698,8 @@ ScriptedImporter:
     - {x: 26, y: 27}
     - {x: 27, y: 28}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -738, y: 5}
+    uvTransform: {x: 312, y: 570}
+    spritePosition: {x: 1050, y: 565}
   - name: Offhand
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -7057,8 +7060,8 @@ ScriptedImporter:
     - {x: 28, y: 29}
     - {x: 29, y: 30}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -546, y: -520}
+    uvTransform: {x: 682, y: 146}
+    spritePosition: {x: 1228, y: 666}
   - name: L_LowerArm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -7395,8 +7398,8 @@ ScriptedImporter:
     - {x: 25, y: 26}
     - {x: 26, y: 27}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -645, y: -534}
+    uvTransform: {x: 312, y: 4}
+    spritePosition: {x: 957, y: 538}
   - name: L_Hand
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -7722,8 +7725,8 @@ ScriptedImporter:
     - {x: 24, y: 25}
     - {x: 25, y: 26}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -379, y: -587}
+    uvTransform: {x: 888, y: 4}
+    spritePosition: {x: 1267, y: 591}
   characterData:
     bones:
     - name: bone_1
@@ -8035,6 +8038,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -8042,6 +8046,7 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings: []
   mosaicLayers: 1
@@ -8054,6 +8059,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -8312,6 +8319,9 @@ ScriptedImporter:
     isVisible: 0
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

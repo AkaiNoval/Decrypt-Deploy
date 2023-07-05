@@ -47,9 +47,17 @@ public class CurrencyManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void Update()
+    private void OnEnable()
     {
-        if (IsGameStarted&& !isCoroutineRunning)
+        GameManager.GameStarted += ChangeGameState;
+    }
+    private void OnDisable()
+    {
+        GameManager.GameStarted -= ChangeGameState;
+    }
+    private void Update()
+    {   
+        if (IsGameStarted && !isCoroutineRunning)
         {
             isCoroutineRunning = true;
             StartCloniteIncrement();
@@ -58,6 +66,7 @@ public class CurrencyManager : MonoBehaviour
 
     public void StartCloniteIncrement()
     {
+        Debug.Log("Start Increasing Clonite");
         if (cloniteIncrementCoroutine == null)
         {
             cloniteIncrementCoroutine = CloniteIncrementCoroutine();
@@ -81,6 +90,11 @@ public class CurrencyManager : MonoBehaviour
             PlayerClonite++;
             yield return new WaitForSeconds(timeBetweenIncrement);
         }
+    }
+    //A really bad way to do this kind of stuff, well just keep it for demon for now
+    void ChangeGameState()
+    {
+        IsGameStarted = true; 
     }
 }
 

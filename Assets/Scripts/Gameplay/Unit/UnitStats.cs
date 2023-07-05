@@ -194,6 +194,7 @@ public class UnitStats : MonoBehaviour
     {
         if (IsDead() && !wasDead)
         {
+            Destroy(gameObject, 10f);
             wasDead= true;
             Collider2D collider2D = gameObject.GetComponent<Collider2D>();
             collider2D.enabled = false;

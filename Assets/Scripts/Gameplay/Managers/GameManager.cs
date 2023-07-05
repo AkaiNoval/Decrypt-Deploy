@@ -29,8 +29,11 @@ public class GameManager : MonoBehaviour
     public static event Action GameStarted; // Event declaration using Action delegate
     public static event Action GameOver; // Event declaration using Action delegate
 
+    public bool StartGame;
+
     [SerializeField] bool isGameStarted;
     [SerializeField] bool isGameOver;
+    
     //public bool IsGameStarted { get => isGameStarted; set => isGameStarted = value; }
     public bool IsGameOver { get => isGameOver; set => isGameOver = value; }
     public bool IsGameStarted
@@ -43,7 +46,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
+        if (StartGame == false) return;
         if (!IsGameStarted)
         {
             GameStarted?.Invoke(); 

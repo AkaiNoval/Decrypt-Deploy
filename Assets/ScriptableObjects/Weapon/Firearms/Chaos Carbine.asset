@@ -17,7 +17,7 @@ MonoBehaviour:
   WeaponType: 1
   ScrapCost: 50
   CloseRange: 3
-  FarRange: 30
+  FarRange: 35
   unitCriticalChance: 10
   unitCriticalDamage: 50
   DodgeChance: 0

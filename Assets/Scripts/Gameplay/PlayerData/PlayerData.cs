@@ -29,8 +29,5 @@ public class PlayerData : MonoBehaviour
 
         // If no instance exists, set this as the instance
         instance = this;
-
-        // Keep the object persistent between scenes
-        DontDestroyOnLoad(gameObject);
     }
 }

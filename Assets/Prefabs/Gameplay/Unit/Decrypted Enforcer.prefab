@@ -952,7 +952,7 @@ Animator:
   m_GameObject: {fileID: 3055377168371159604}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c32ab1799c6718d47b28d2423e6c7fc3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9f2f8a4836c6fd746b928fee27fa9183, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3406,7 +3406,7 @@ MonoBehaviour:
   SupportType: {fileID: 11400000, guid: 6e320d9171e1f304da78c9113a3f7a98, type: 2}
   PassiveAbility: {fileID: 11400000, guid: 49bea03f766c214468a72cbf6ae4eb2d, type: 2}
   ActiveAbility: {fileID: 11400000, guid: 8e80b60421733924591de172b368ed0c, type: 2}
-  Weapon: {fileID: 11400000, guid: 587a26145af91e74aa2866494811e1dc, type: 2}
+  Weapon: {fileID: 11400000, guid: 0ebfcba2669d20e47bd9b05b3d01d422, type: 2}
   unitCost: 0
   unitCharisma: 0
   preparationTime: 0
