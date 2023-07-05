@@ -50,22 +50,8 @@ By utilizing these different targeting options, units can dynamically select the
   
 ### **State pattern**
 ![State1](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/cfc89f0f-8960-444d-bb74-65570d1f148f)
-    public CurrentState currentState;
 
-    public Idle StateIdle = new Idle();
-    
-    public Moving StateMoving = new Moving();
-    
-    public MeleeAttack StateMeleeAttack = new MeleeAttack();
-    
-    public RangedAttack StateRangeAttack = new RangedAttack();
-    
-    public Support StateSupport = new Support();
-    
-    public UsingActiveAbility StateActiveAbility = new UsingActiveAbility();
-    
-    public UsingPassiveAbility StatePassiveAbility = new UsingPassiveAbility();
-    `
+![State2](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/caec4069-305c-472a-9488-8cf5c993c381)
 In the game, the State Pattern is implemented to organize and maintain the behaviors of each unit more effectively. Each unit, whether categorized as an Attacker or Supporter type, has its own state machine.
 
 Let's explore the different states a unit can have:
