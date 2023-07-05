@@ -1,6 +1,7 @@
 # Deploy&Decrypt
 # Note: This project is (WIP) don't expect it too much honestly T.T
 ## **Introduction**
+![UnitAndBase](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/e7a3830d-899a-4d7e-bbb7-8d59a8cbb56d)
 
 Welcome to the Tower Defense and RTS game demo! Defend your futuristic van base from enemy attacks using a cloning machine to create units and equip them with different weapons. Strategically deploy your units and unleash their abilities to emerge victorious! Enjoy the exciting gameplay and share your feedback with us.
 
