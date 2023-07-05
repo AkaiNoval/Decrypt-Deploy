@@ -70,7 +70,11 @@ By employing the State Pattern, the codebase achieves improved readability and f
 ## **Environment**
 
 In the game, the background and most assets are created using AI-generated content to avoid copyright issues. This approach ensures that the game's visuals are unique and original, reducing the risk of infringing on existing copyrighted material.
-
+![Below Road(Upscaled)](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/c7e9425e-5a8f-42e7-9e1d-6d44c8123ed8)
+![Layer 2](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/9d831750-d623-4d04-931b-122f7bb48ad5)
+![Layer 3(Upscaled)](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/2997f7e8-5dbf-499f-89e6-9fe5f1ae32ca)
+![Layer 4](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/19a10734-2f80-4db4-a3c8-5198a20a18fc)
+![Layer1(Upscaled)](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/b06d14ff-a0b3-480f-b36d-4de0aa247f3d)
 Additionally, the game incorporates a Parallax effect to create a sense of depth and movement in the background. The Parallax effect involves displaying multiple layers of images at different speeds, giving the illusion of depth as the player moves through the game environment. This technique enhances the visual appeal of the game and adds to the immersive experience.
 ## **Player Control**
 The game is designed for mobile devices, allowing players to control the gameplay using touch controls. One finger is used for movement, while two fingers control zooming in and out. The controls are intuitive and optimized for a seamless mobile gaming experience.
