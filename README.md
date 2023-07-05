@@ -24,7 +24,7 @@ In my game, each unit is rich in statistics and capabilities, enhancing the stra
 - Resistance: Describes the unit's defense against various types of damage, including bullets, melee attacks, poison, fire, cryo, electrified, and explosion damage.
   
 ### **Skills**
-
+![Abilities](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/bd038a16-2b05-44ca-8189-35fa66c1d616)
 - Active Skill: Unique abilities that can be actively triggered by the player during battles.
 - Passive Skill: Inherent abilities that provide constant benefits to the unit.
 - Support Skill: Skills that assist and boost nearby allied units.
