@@ -1,5 +1,5 @@
 # Deploy&Decrypt
-# Note: WIP- 
+# Note: WIP- Personal Project
 Start date: May 08, 2023
 Last updated July 06, 2023
 Role: Developer, 2D Art creator (hand drawn and AI-generated)
