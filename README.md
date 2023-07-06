@@ -1,5 +1,8 @@
 # Deploy&Decrypt
-# Note: This project is (WIP) don't expect it too much honestly T.T
+# Note: WIP- 
+Start date: June 01, 2023
+Last updated July 06, 2023
+Role: Developer, 2D Art creator (hand drawn and AI-generated)
 ## **Introduction**
 ![UnitAndBase](https://github.com/AkaiNoval/Unity-Radio-Frequency/assets/127651185/e7a3830d-899a-4d7e-bbb7-8d59a8cbb56d)
 
